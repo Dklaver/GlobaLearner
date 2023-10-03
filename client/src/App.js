@@ -5,13 +5,14 @@ function App(){
 const [backEndData, setBackEndData] = useState([{}])
 
 useEffect(() => {
-  fetch("/api").then(
+  fetch(`/api`).then(
     response => response.json()
 
   ).then(
     data => {setBackEndData(data)}
   )
 }, [])
+
 
   return (
     <div>
