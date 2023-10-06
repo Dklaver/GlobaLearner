@@ -1,34 +1,27 @@
 
 import React, { useEffect, useState  } from 'react'
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './Pages/Shared/Navbar';
+import Chatbar from './Pages/ChatPage/Components/Chatbar';
 
 function App(){
 
-const [inputText, setInputText] = useState('');
-const [posts, setPosts] = useState([]);
-
 {
   return (
-    <div>
-        <div>
-      <textarea
-      name="posts"
-      rows="1"
-      cols="50"
-      value= "inputText"
-      placeholder='Test'
-      />
-      <br/>
-      <button> </button>
-      <div>
-        <h2>Posts</h2>
-        
-        
-      </div>
-    </div>
-    </div>
-    
-    
+    <Router>
+      
+      <Navbar/>
+      
+        <Routes>
+          <Route path="/"/>
+          <Route path="/users"/>
+          <Route path="/chats" element={<Chatbar />}/>
+        </Routes>
+      
+      
+    </Router>
+      
   )
 }
 };
