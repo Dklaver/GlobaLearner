@@ -1,0 +1,16 @@
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 50px;
+  }
+  
+  textarea {
+    margin-bottom: 10px;
+    resize: none;
+    width: 200px;
+    height: 100px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
