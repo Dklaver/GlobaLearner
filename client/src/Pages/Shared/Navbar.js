@@ -11,7 +11,7 @@ export default function Navbar() {
                     <NavLink to='/chats'>chat</NavLink>
                 </li>
                 <li>
-                    <NavLink to='/users'>user</NavLink>
+                    <NavLink to='/login'>login</NavLink>
                 </li>
             </ul>
         </nav>

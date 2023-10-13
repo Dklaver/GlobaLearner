@@ -41,4 +41,17 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.User = require("./Chat.js")(sequelize, Sequelize);
+db.Chat = require("./Chat.js")(sequelize, Sequelize);
+
+db.Chat.belongsToMany(db.User, {
+  through: "UserChat",
+  foreignKey: "chatId"
+});
+
+db.User.belongsToMany(db.Chat, {
+  through: "UserChat",
+  foreignKey: "userId"
+});
+
 module.exports = db;

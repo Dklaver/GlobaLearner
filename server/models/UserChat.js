@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             references: {
                 model: 'User',
-                key: 'id',
             },
         },
         chatId: {
@@ -15,11 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             references: {
                 model: 'Chat',
-                key: 'id',
             },
         },
         
     });
 
     return UserChat;
-};
+};  
