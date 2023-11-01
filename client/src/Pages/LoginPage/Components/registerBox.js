@@ -3,9 +3,12 @@ import './register.css';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
+import axios from "../../../axios";
 
 const USER_REGEX = /^[a-zA-Z0-9]{4,24}$/;
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d).{8,30}$/;
+
+const REGISTER_URL = "/register";
 
 export default function Register() {
 
@@ -60,9 +63,36 @@ export default function Register() {
             setError("invalid entry");
             return;
         }
+        try {
+            const response = await axios.post(REGISTER_URL, JSON.stringify({user, password}),
+            {
+                headers: {"Content-Type": 'application/json'},
+                withCredentials: true
+            });
+            console.log(response.data);
+            SetSucces(true);
+        }catch (err) {
+            if (!err.response) {
+                setError("no server response");
+            }else if (err.response?.status === 409 ) {
+                setError("username taken");
+            } else {
+                setError("registration failed");
+            }
+            errRef.current.focus();
+        }
     }
 
     return (
+        <>
+        {succes ? (
+            <section>
+                <h1>Succes!</h1>
+                <p>
+                    <NavLink to="/login">Sign in</NavLink>
+                </p>
+            </section>
+        ) : (
         <section>
             <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
             <h1>Register</h1>
@@ -132,5 +162,7 @@ export default function Register() {
 
             </form>
         </section>
+        )}
+        </>
     )
 }
