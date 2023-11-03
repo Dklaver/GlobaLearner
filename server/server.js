@@ -1,11 +1,23 @@
 const express = require("express");
 const app = express();
 const mysql = require("mysql2");
+const router = express.Router();
+const cors = require('cors');
 
-const db = require("./models");
 
-const userRoute = require('./routes/User');
-const chatRoute = require('./routes/Chat');
+const db = require("./GlobalearnerController/models");
+
+const userRoute = require('./GlobalearnerController/routes/User');
+const chatRoute = require('./GlobalearnerController/routes/Chat');
+
+
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+    credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use('/users', userRoute);
 app.use('/chat', chatRoute);

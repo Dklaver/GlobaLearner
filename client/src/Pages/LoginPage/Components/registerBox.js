@@ -8,7 +8,7 @@ import axios from "../../../axios";
 const USER_REGEX = /^[a-zA-Z0-9]{4,24}$/;
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d).{8,30}$/;
 
-const REGISTER_URL = "/register";
+
 
 export default function Register() {
 
@@ -64,10 +64,10 @@ export default function Register() {
             return;
         }
         try {
-            const response = await axios.post(REGISTER_URL, JSON.stringify({user, password}),
+            const response = await axios.post('users/register', JSON.stringify({user, password}),
             {
                 headers: {"Content-Type": 'application/json'},
-                withCredentials: true
+                withCredentials: true,
             });
             console.log(response.data);
             SetSucces(true);
