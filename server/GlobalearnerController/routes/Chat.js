@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Chat } = require("../models")
+const { Chat } = require("../../GlobalearnerDAL/models")
 
 router.get("/", (req, res) => {
     Chat.findAll().then((chats)=> {

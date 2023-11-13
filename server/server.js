@@ -5,12 +5,12 @@ const router = express.Router();
 const cors = require('cors');
 
 
-const db = require("./GlobalearnerController/models");
+const db = require("./GlobalearnerDAL/models");
 
 const userRoute = require('./GlobalearnerController/routes/User');
 const chatRoute = require('./GlobalearnerController/routes/Chat');
 
-
+app.use(express.json());
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -21,6 +21,7 @@ app.use(cors(corsOptions));
 
 app.use('/users', userRoute);
 app.use('/chat', chatRoute);
+
 
 
 db.sequelize.sync().then((req) => {
