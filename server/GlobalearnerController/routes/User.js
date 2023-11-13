@@ -1,14 +1,18 @@
 const express = require('express');
-const router = express.Router();
+const { User } = require('../../GlobalearnerDAL/models');
 
-module.exports = class UserController {
+
+class UserController {
 
     constructor(userManager) {
         this.userManager = userManager;
+        this.router = express.Router();
 
-        router.get("/", async (req, res) => {
+        this.router.get("/get", async (req, res) => {
             try {
-                
+                let users = await this.userManager.GetUser();
+                res.json(users);
+                console.log(users);
                 res.status(200).json(users);
             } catch (err) {
                 console.error(err);
@@ -16,7 +20,7 @@ module.exports = class UserController {
             }
         });
         
-        router.get("/create", async (req, res) => {
+        this.router.get("/create", async (req, res) => {
             try {
         
                 res.status(201).json({ message: 'User created successfully' });
@@ -27,7 +31,7 @@ module.exports = class UserController {
             }
         });
         
-        router.get("/delete", async (req, res) => {
+        this.router.get("/delete", async (req, res) => {
             try {
                 // Your deletion logic here
                 res.status(200).json({ message: 'User deleted successfully' });
@@ -37,14 +41,13 @@ module.exports = class UserController {
             }
         });
         
-        router.post('/register', async (req, res) => {
+        this.router.post('/register', async (req, res) => {
             try {
                 const { user, password } = req.body;
                 console.log('Received data:', { user, password });
                 
                 // Your registration logic here
                 
-        
                 res.status(201).json({ message: 'User registered successfully' });
             } catch (err) {
                 console.error(err);
@@ -55,4 +58,5 @@ module.exports = class UserController {
     }
 }
 
-
+// Export the router instance directly
+module.exports = UserController;

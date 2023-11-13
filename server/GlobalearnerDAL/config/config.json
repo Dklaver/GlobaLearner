@@ -4,7 +4,9 @@
     "password": "admin",
     "database": "dbi512957",
     "host": "studmysql01.fhict.local",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "migrationStorage": "json",
+    "migrationStoragePath": "GlobalearnerDAL/migrations"
   },
   "test": {
     "username": "root",

@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require(".");
+const { sequelize } = require("./index");
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("User", {
@@ -9,14 +9,6 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
         },
         name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        country: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
             type: DataTypes.STRING,
             allowNull: false,
         },
