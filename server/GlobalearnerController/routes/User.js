@@ -11,19 +11,8 @@ class UserController {
         this.router.get("/get", async (req, res) => {
             try {
                 let users = await this.userManager.GetUser();
-                res.json(users);
-                console.log(users);
                 res.status(200).json(users);
-            } catch (err) {
-                console.error(err);
-                res.status(500).json({ error: 'Internal Server Error' });
-            }
-        });
-        
-        this.router.get("/create", async (req, res) => {
-            try {
-        
-                res.status(201).json({ message: 'User created successfully' });
+                console.log(users);
                 
             } catch (err) {
                 console.error(err);
@@ -41,14 +30,31 @@ class UserController {
             }
         });
         
-        this.router.post('/register', async (req, res) => {
+        this.router.get('/register', async (req, res) => {
             try {
                 const { user, password } = req.body;
                 console.log('Received data:', { user, password });
                 
-                // Your registration logic here
+                this.userManager.createUser(user, password);
                 
                 res.status(201).json({ message: 'User registered successfully' });
+            } catch (err) {
+                console.error(err);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+
+        this.router.post("/login", async (req, res) => {
+            try {
+                const { user, password } = req.body;
+                console.log('Received data:', { user, password });
+
+                const token = this.userManager.getUserByName(user, password);
+                res.status(201).json({ message: 'Succesfully validated user login' });
+                console.log(token);
+                return token;
+                
+                
             } catch (err) {
                 console.error(err);
                 res.status(500).json({ error: 'Internal Server Error' });

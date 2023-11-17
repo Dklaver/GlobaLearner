@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import './register.css';
+import './authentication.css';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
@@ -89,7 +89,7 @@ export default function Register() {
             <section>
                 <h1>Succes!</h1>
                 <p>
-                    <NavLink to="/login">Sign in</NavLink>
+                    <NavLink to="/">Home</NavLink>
                 </p>
             </section>
         ) : (

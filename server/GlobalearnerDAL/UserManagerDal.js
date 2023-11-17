@@ -38,6 +38,19 @@ module.exports = class UserDal extends iUserManagerDal {
             throw error;
         }
     }
+
+    async getUserByName(user) {
+        try{
+            const result = await this.User.findOne({
+                where: {
+                    name: user
+                }
+            })
+            return result.toJSON();
+        } catch (error) {
+            throw error;
+        }
+    }
 };
 
 
