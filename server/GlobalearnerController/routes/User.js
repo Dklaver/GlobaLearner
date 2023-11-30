@@ -30,7 +30,7 @@ class UserController {
             }
         });
         
-        this.router.get('/register', async (req, res) => {
+        this.router.post('/register', async (req, res) => {
             try {
                 const { user, password } = req.body;
                 console.log('Received data:', { user, password });
@@ -49,10 +49,11 @@ class UserController {
                 const { user, password } = req.body;
                 console.log('Received data:', { user, password });
 
-                const token = this.userManager.getUserByName(user, password);
-                res.status(201).json({ message: 'Succesfully validated user login' });
-                console.log(token);
-                return token;
+                const result = await this.userManager.getUserByName(user, password);
+                console.log("Sending Data:" + JSON.stringify(result))
+                res.status(201).json({ result });
+                
+                
                 
                 
             } catch (err) {

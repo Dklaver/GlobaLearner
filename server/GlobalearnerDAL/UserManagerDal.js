@@ -41,12 +41,23 @@ module.exports = class UserDal extends iUserManagerDal {
 
     async getUserByName(user) {
         try{
+            // const succes = false;
             const result = await this.User.findOne({
                 where: {
                     name: user
                 }
             })
-            return result.toJSON();
+            console.log(result);
+            return result;
+            // if (result){
+            //     succes = true;
+            //     console.log("succes")
+            //     return result, succes;
+            // }else{
+            //     const message = "user not found"
+            //     console.log(message)
+            //     return err, succes;
+            // }   
         } catch (error) {
             throw error;
         }

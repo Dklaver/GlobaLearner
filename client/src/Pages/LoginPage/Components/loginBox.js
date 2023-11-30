@@ -3,7 +3,7 @@ import './authentication.css';
 import { NavLink } from "react-router-dom";
 import axios from '../../../axios';
 
-const Login = () => {
+export default function Login() {
 
     const userRef = useRef();
     const errRef = useRef();
@@ -11,42 +11,53 @@ const Login = () => {
     const [user, setUser] = useState('');
     const [password , setPassword] = useState('');
     const [error, setError] = useState('');
-    const [succes, setSucces] = useState(false);
+    const [allowed, setAllow] = useState();
+    const [status, setStatus] = useState('');
 
     useEffect(() => {
         userRef.current.focus();
-    }, []);
+    }, [])
+    
     useEffect(() => {
-        setError('');
-    }, [user, password])
-
+        console.log("IS ALLOWED?: " + allowed);
+    }, [allowed])
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(user, password);
         try{
-            const response = await axios.post('users/login', JSON.stringify((user, password)),
+            const response = await axios.post('users/login', JSON.stringify({user, password}),
         {
             headers: {"Content-Type": 'application/json'},
             withCredentials: true,
         });
-        console.log(response.data);
+        console.log("responded data: " + JSON.stringify(response.data));
+        const responseData = response.data.result;
+        const {token, message, success } = responseData;
+        localStorage.setItem("jwt", token);
+        setStatus(message);
         setUser("");
         setPassword("");
-        setSucces(true);
+        setAllow(success);
+        
+        if (success === false){
+            setError(message)
+        }
         }catch (err) {
             if (!err.response) {
+                console.log(err)
                 setError("no server response");
             } else {
                 setError("Sign up failed");
             }
-        
-    }
-    
+            }
+        }
+
     return (
         <>
-        {succes ? (
+        {allowed ? (
             <section>
-                <h1>Succes!</h1>
+                <h1>{status}</h1>
                 <p>
                     <NavLink to="/">Home</NavLink>
                 </p>
@@ -84,9 +95,6 @@ const Login = () => {
         </section>
         )}
         </>
-        
     )
-    }
 }
 
-export default Login;

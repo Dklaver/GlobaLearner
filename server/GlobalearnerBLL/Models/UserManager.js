@@ -1,11 +1,12 @@
 const iUserManager = require("../../InterfaceLayer/iUserManager")
 const bcrypt = require('bcrypt');
+require("dotenv").config();
 
 const jwt = require('jsonwebtoken');
 
 const maxAge = 3 * 24 * 60 * 60;
     const createToken = (id) => {
-        return jwt.sign({id}, 'supersecret top secret', {
+        return jwt.sign({id}, process.env.JWT_SECRET_KEY, {
             expiresIn: maxAge
         });
     }
@@ -28,18 +29,19 @@ module.exports = class UserManager extends iUserManager{
     }
     async getUserByName(user, password){
         try{
-            const userData = this.UserManagerDal.getUserByName(user)
-        
+            const userData = await this.UserManagerDal.getUserByName(user)
+            console.log("userData: " + userData);
         if (!userData) {
-            console.log('no userdata found')
+            console.log('no userdata found');
+            return { success: false, message: 'No user found' };
         }
         const hashedpassword = userData.password;
         const passwordMatch = await bcrypt.compare(password, hashedpassword);
-
+        console.log("passwordMatch: " + passwordMatch);
         if (passwordMatch){
             const token = createToken(userData.id);
 
-            return {token}
+            return {success: true, token, message: "success!"};
         }else {
             return { success: false, message: 'Invalid password' };
         }
