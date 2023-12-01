@@ -24,7 +24,7 @@ let userController = new UserController(userBL);
 app.use('/users', userController.router);
 app.use('/chat', chatRoute);
 
-
+module.exports = app;
 
 db.sequelize.sync().then((req) => {
     app.use(express.json());
