@@ -1,5 +1,5 @@
 const express = require('express');
-const { User } = require('../../GlobalearnerDAL/models');
+
 
 
 class UserController {

@@ -30,7 +30,7 @@ module.exports = class UserManager extends iUserManager{
     async getUserByName(user, password){
         try{
             const userData = await this.UserManagerDal.getUserByName(user)
-            console.log("userData: " + userData);
+            console.log("userData: " + JSON.stringify(userData));
         if (!userData) {
             console.log('no userdata found');
             return { success: false, message: 'No user found' };
@@ -46,7 +46,7 @@ module.exports = class UserManager extends iUserManager{
             return { success: false, message: 'Invalid password' };
         }
         }catch (err) {
-            console.log(err)
+            return {message: err}
         }
     } 
 }

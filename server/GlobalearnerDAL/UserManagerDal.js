@@ -23,8 +23,10 @@ module.exports = class UserDal extends iUserManagerDal {
                 name: user,
                 password: password,
             });
+            const newUserObject = newUser.toJSON();
+            console.log("NEWUSER" + newUserObject);
             // Return the created user or any other relevant information
-            return newUser.toJSON();
+            return newUserObject;
         } catch (error) {
             throw error;
         }
@@ -32,8 +34,16 @@ module.exports = class UserDal extends iUserManagerDal {
 
     async getAll() {
         try {
-            const allUsers = await this.User.findAll();
-            return allUsers.map((user) => user.toJSON());
+            const allUsers = await this.User.findAll({
+                attributes: ['name', 'password'],
+            });
+            console.log("ALLUSERS: " + allUsers);
+
+            const plainUsers = allUsers.map((userInstance) => userInstance.toJSON());
+
+            console.log("plain user = " + plainUsers)
+            return plainUsers;
+
         } catch (error) {
             throw error;
         }
@@ -47,8 +57,10 @@ module.exports = class UserDal extends iUserManagerDal {
                     name: user
                 }
             })
-            console.log(result);
-            return result;
+            const plainResult = result.toJSON();
+
+            console.log(plainResult);
+            return plainResult;
             // if (result){
             //     succes = true;
             //     console.log("succes")
