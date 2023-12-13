@@ -1,9 +1,8 @@
 const { createUser, getAllUsers } = require('./mocks/mockDal');
 const UserManager = require('../GlobalearnerBLL/Models/UserManager')
 const MockUserManagerDal = require('./mocks/mockDal');
-const bcrypt = require('bcrypt');
 
-jest.mock('bcrypt');
+
 jest.mock('./mocks/mockDal');
 
 
