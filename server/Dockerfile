@@ -6,7 +6,7 @@ COPY server/package*.json ./
 
 RUN npm install
 
-COPY server/server.js ./
+COPY . .
 
 EXPOSE 5000
 
