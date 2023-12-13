@@ -1,10 +1,12 @@
 FROM node:18
 
-WORKDIR /server
+WORKDIR /app
 
 COPY server/package*.json ./
 
 RUN npm install
+
+COPY server/server.js ./
 
 EXPOSE 5000
 
