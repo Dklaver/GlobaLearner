@@ -2,14 +2,12 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY server/package*.json ./
 
 RUN npm install
 
-COPY . .
-
-ENV PORT 5000
+COPY server/ ./
 
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
