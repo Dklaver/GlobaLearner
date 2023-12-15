@@ -8,9 +8,9 @@ class UserController {
         this.userManager = userManager;
         this.router = express.Router();
 
-        this.router.get("/get", async (req, res) => {
+        this.router.get("/", async (req, res) => {
             try {
-                let users = await this.userManager.GetUser();
+                let users = await this.userManager.GetUsers();
                 res.status(200).json(users);
                 console.log(users);
                 

@@ -33,7 +33,7 @@ describe('User', () =>{
             };
 
             const userManager = new UserManager(mockUserManagerDal);
-            const allUsers = await userManager.GetUser();
+            const allUsers = await userManager.GetUsers();
 
             expect(allUsers).toEqual([
                 { id: 1, name: 'user1', password: 'password1' },

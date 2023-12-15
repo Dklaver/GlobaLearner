@@ -1,9 +1,16 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
+
+//user
 const UserDal = require('./GlobalearnerDAL/UserManagerDal');
 const UserManager = require('./GlobalearnerBLL/Models/UserManager');
 const UserController = require('./GlobalearnerController/routes/User');
+
+//Chat
+const ChatDal = require('./GlobalearnerDAL/ChatManagerDal');
+const ChatManager = require('./GlobalearnerBLL/Models/ChatManager');
+const ChatController = require('./GlobalearnerController/routes/Chat');
 
 const db = require("./GlobalearnerDAL/models");
 
@@ -17,12 +24,18 @@ const corsOptions = {
     credentials: true,
 };
 app.use(cors(corsOptions));
+//user
 let userDal = new UserDal();
 let userBL = new UserManager(userDal);
 let userController = new UserController(userBL);
 
+//chat
+let chatDal = new ChatDal();
+let chatBL = new ChatManager(chatDal)
+let chatController = new ChatController(chatBL)
+
 app.use('/users', userController.router);
-app.use('/chat', chatRoute);
+app.use('/chat', chatController.router);
 
 module.exports = app;
 

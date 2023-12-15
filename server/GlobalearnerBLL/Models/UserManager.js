@@ -24,7 +24,7 @@ module.exports = class UserManager extends iUserManager{
         return this.UserManagerDal.create(user, hashpassword);
 
     }
-    async GetUser(){
+    async GetUsers(){
         return this.UserManagerDal.getAll();
     }
     async getUserByName(user, password){

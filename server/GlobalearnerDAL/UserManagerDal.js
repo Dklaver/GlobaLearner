@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const UserModel = require("./models/User");
 const iUserManagerDal = require("../InterfaceLayer/iUserManagerDal");
 
+
 module.exports = class UserDal extends iUserManagerDal {
     constructor() {
         super();
