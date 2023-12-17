@@ -7,6 +7,7 @@ import Chat from './Pages/ChatPage/Components/Chat';
 import Register from './Pages/LoginPage/Components/registerBox';
 import Login from './Pages/LoginPage/Components/loginBox';
 import CreateChat from './Pages/ChatPage/Components/CreateChat';
+import ChatLayout from './Pages/ChatPage/Components/ChatLayout';
 
 function App(){
 
@@ -20,6 +21,7 @@ function App(){
           <Route path="/"/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/chats" element={<Chat />}/>
+          <Route path="/chat/:id" element={<ChatLayout />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/chats/create" element={<CreateChat />}/>
         </Routes>

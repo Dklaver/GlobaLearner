@@ -2,13 +2,15 @@ import React, { useEffect, useState} from 'react'
 import '../style.css';
 import axios from '../../../axios';
 import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ChatLayout from './ChatLayout';
 
 export default function Chat() {
 
     const [allowed, SetAllowed] = useState(false);
     const [chats, setChat] = useState([]);
     
+  
 
   useEffect(() => {
         validateUser();
@@ -57,6 +59,7 @@ export default function Chat() {
                 <section className="chat-section" key={chat.id}>
                    <div className="chat-name">{chat.name}</div>
                    <div className='chat-language'>Language: {chat.language}</div>
+                   <NavLink to={`/chat/${chat.id}`} className='button-ViewChat'>Join</NavLink>
                   {}
                 </section>
               ))}
@@ -68,4 +71,4 @@ export default function Chat() {
         </>
       );
     };
-  
+
