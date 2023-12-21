@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
 
 //user
 const UserDal = require('./GlobalearnerDAL/UserManagerDal');
@@ -13,9 +13,15 @@ const ChatDal = require('./GlobalearnerDAL/ChatManagerDal');
 const ChatManager = require('./GlobalearnerBLL/Models/ChatManager');
 const ChatController = require('./GlobalearnerController/routes/Chat');
 
+//Message
+
+const MessageController = require('./GlobalearnerController/routes/Message');
+
 const db = require("./GlobalearnerDAL/models");
 
 app.use(express.json());
+
+
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -43,4 +49,22 @@ db.sequelize.sync().then((req) => {
     const server = app.listen(5000, () => {
         console.log(`Server is listening to 5000`);
     })
+    const io = new Server(server, {
+        cors: {
+            origin: 'http://localhost:3000',
+            optionsSuccessStatus: 200,
+            credentials: true,
+            methods: ["GET", "POST"],
+        },
+    });
+
+    io.on("connection", (socket) => {
+        console.log('user connected: '+ socket.id)
+
+        socket.on("send_message", (data) => {
+            socket.broadcast.emit("recieve_message", data)
+        })
+    })
 })
+
+

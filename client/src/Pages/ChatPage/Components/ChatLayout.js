@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-
+import io from 'socket.io-client'
 import { useParams } from "react-router-dom";
 import axios from '../../../axios';
 import './Chatbar.css';
@@ -8,16 +8,33 @@ import { NavLink } from 'react-router-dom';
 export default function ChatLayout() {
 
     const { id } = useParams();
+    const socket = io.connect("http://localhost:5000")
+
+    const [messageLeft, SetMessagesLeft] = useState([]);
+    const [messageRight, SetMessagesRight] = useState([]);
+    const [lastMessage, SetLastMessage] = useState("");
     
     useEffect(() => {
-       
-      }, [])
+       socket.on("recieve_message", (data) => {
+        alert(data)
+       })
+      }, [socket])
 
-      const getAllChatData = async() => {
+      // const getAllChatData = async() => {
 
-        const chatData = await axios.get('chat/chatid', id)
+      //   const chatData = await axios.get('chat/chatid', id)
 
-        const responseData = chatData.data
+      //   const responseData = chatData.data
+      // }
+
+      const handleInputValue = (e) => {
+        e.preventDefault();
+        SetLastMessage(e.target.value)
+      }
+
+      const sendMessage = (data) =>{
+        socket.emit("send_message", lastMessage)
+        
       }
 
   return (
@@ -58,9 +75,9 @@ export default function ChatLayout() {
           </ul>
 
           <form className="message-form" id="message-form">
-            <input type="text" name="message" id="message-input" className="message-input" placeholder="type here..."/>
+            <input type="text" name="message" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue}/>
               <div className="v-divider"></div>
-              <button type="submit" className="send-button">send <span>➡️</span></button>
+              <button type="submit" className="send-button" onClick={sendMessage}>send <span>➡️</span></button>
           </form>
           
         </div>

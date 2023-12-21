@@ -44,6 +44,7 @@ db.Sequelize = Sequelize;
 db.User = require("./User.js")(sequelize, Sequelize);
 db.Chat = require("./Chat.js")(sequelize, Sequelize);
 db.UserChat = require("./UserChat.js")(sequelize,Sequelize);
+db.Message = require("./Message.js")(sequelize,Sequelize);
 
 // Define the association
 db.Chat.belongsToMany(db.User, {
@@ -55,5 +56,15 @@ db.User.belongsToMany(db.Chat, {
   through: db.UserChat,
   foreignKey: "userId"
 });
+
+db.Message.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user'
+})
+
+db.Message.belongsTo(db.Chat, {
+  foreignKey: 'chatId',
+  as: 'chat'
+})
 
 module.exports = db;
