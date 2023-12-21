@@ -1,4 +1,5 @@
 const express = require('express');
+const {GetUserId} = require ('../middleware/validateJWT')
 
 
 
@@ -61,6 +62,27 @@ class UserController {
                 res.status(500).json({ error: 'Internal Server Error' });
             }
         });
+
+        this.router.get("/getById", GetUserId, async (req, res) => {
+            try{
+                const userId = req.userId;
+                const user = await this.userManager.findUserById(userId);
+                console.log('user: ' + user);
+                res.status(201).json({user});
+            }catch{
+                res.status(500).json({error: 'internal Server Error'})
+            }
+        })
+
+        this.router.get("/getByChatId", async (req,res) => {
+            try{
+                const chatId = req.query.chatId;
+                const users = await this.userManager.getUsersByChatId(chatId)
+                res.status(201).json({users})
+            }catch (err){
+                console.log(err)
+            }
+        })
 
     }
 }

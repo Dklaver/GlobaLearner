@@ -59,4 +59,13 @@ module.exports = class UserManager extends iUserManager{
             return {message: err}
         }
     }
+
+    async getUsersByChatId(chatId){
+        try{
+            const users = await this.UserManagerDal.getUsersByChatId(chatId);
+            return users;
+        }catch (err){
+            throw err;
+        }
+    }
 }

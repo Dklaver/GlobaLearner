@@ -13,19 +13,13 @@ module.exports = (sequelize) => {
           },
           userId: {
             type: DataTypes.INTEGER,
+            primaryKey: false,
             allowNull: false,
-            references: {
-                model: 'User',
-                key: 'id'
-            },
           },
           chatId: {
             type: DataTypes.INTEGER,
+            primaryKey: false,
             allowNull: false,
-            references: {
-                model: 'Chat',
-                key: 'id'
-            },
           },
           
     })

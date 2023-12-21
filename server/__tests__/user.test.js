@@ -66,3 +66,38 @@ describe("Users", () => {
         })
     })
 })
+
+describe("Users", () => {
+    describe("GetUserById", () =>{
+        it("should return 1 user", async() =>{
+            const userId = 1;
+
+            const mockUserManagerDal = {
+                findUserById: jest.fn().mockResolvedValue({id: 1, name: "testUser", password: "encryptedPassword"})
+            }
+            const userManager = new UserManager(mockUserManagerDal);
+            const result = await userManager.findUserById(userId);
+
+            expect(result.id).toBe(1)
+            expect(result.name).toBe("testUser")
+            expect(result.password).toBe("encryptedPassword")
+        })
+    })
+})
+
+describe("Users", () => {
+    describe("GetUserById", () =>{
+        it("should give error not found", async() =>{
+            const userId = 235235;
+
+            const mockUserManagerDal = {
+                findUserById: jest.fn().mockResolvedValue({message: 'user not found'})
+            }
+            const userManager = new UserManager(mockUserManagerDal);
+            const result = await userManager.findUserById(userId);
+
+            expect(result.message).toBe("user not found")
+            
+        })
+    })
+})

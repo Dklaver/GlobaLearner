@@ -38,6 +38,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
@@ -48,23 +49,27 @@ db.Message = require("./Message.js")(sequelize,Sequelize);
 
 // Define the association
 db.Chat.belongsToMany(db.User, {
+  onDelete: 'CASCADE',
   through: db.UserChat,
   foreignKey: "chatId"
 });
 
 db.User.belongsToMany(db.Chat, {
+  onDelete: 'CASCADE',
   through: db.UserChat,
   foreignKey: "userId"
 });
 
 db.Message.belongsTo(db.User, {
   foreignKey: 'userId',
-  as: 'user'
+
+  onUpdate: 'CASCADE'
 })
 
 db.Message.belongsTo(db.Chat, {
   foreignKey: 'chatId',
-  as: 'chat'
+
+  onUpdate: 'CASCADE'
 })
 
 module.exports = db;
