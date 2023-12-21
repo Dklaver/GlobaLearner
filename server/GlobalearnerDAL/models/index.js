@@ -41,16 +41,18 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.User = require("./Chat.js")(sequelize, Sequelize);
+db.User = require("./User.js")(sequelize, Sequelize);
 db.Chat = require("./Chat.js")(sequelize, Sequelize);
+db.UserChat = require("./UserChat.js")(sequelize,Sequelize);
 
+// Define the association
 db.Chat.belongsToMany(db.User, {
-  through: "UserChat",
+  through: db.UserChat,
   foreignKey: "chatId"
 });
 
 db.User.belongsToMany(db.Chat, {
-  through: "UserChat",
+  through: db.UserChat,
   foreignKey: "userId"
 });
 

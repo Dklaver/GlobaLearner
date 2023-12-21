@@ -7,7 +7,7 @@ module.exports = class ChatManager {
     async GetAllChats(){
         return this.ChatManagerDal.GetAllChats();
     }
-    async CreateChat(chatName, language){
-        return this.ChatManagerDal.CreateChat(chatName, language);
+    async CreateChat(chatName, language, userId){
+        return this.ChatManagerDal.CreateChat(chatName, language, userId);
     }
 }

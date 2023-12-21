@@ -36,7 +36,7 @@ module.exports = class UserDal extends iUserManagerDal {
     async getAll() {
         try {
             const allUsers = await this.User.findAll({
-                attributes: ['name', 'password'],
+                attributes: ['name', 'password', 'id'],
             });
             console.log("ALLUSERS: " + allUsers);
 
@@ -62,17 +62,22 @@ module.exports = class UserDal extends iUserManagerDal {
 
             console.log(plainResult);
             return plainResult;
-            // if (result){
-            //     succes = true;
-            //     console.log("succes")
-            //     return result, succes;
-            // }else{
-            //     const message = "user not found"
-            //     console.log(message)
-            //     return err, succes;
-            // }   
         } catch (error) {
             throw error;
+        }
+    }
+
+    async findUserById(id) {
+        try{
+            const result = await this.User.findOne({
+                where: {
+                    id: id
+                }
+            })
+            const plainUser = result.toJSON();
+            return plainUser
+        }catch (err){
+            return{mesasge: err}
         }
     }
 };

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {verifyAccessToken} = require('../middleware/validateJWT')
+const {GetUserId} = require ('../middleware/validateJWT')
 
 class ChatController{
 
@@ -18,12 +19,14 @@ class ChatController{
                 res.status(500).json({succes: false});
             }
         });
-        this.router.post("/create",verifyAccessToken, async(req, res) => {
+        this.router.post("/create",verifyAccessToken,GetUserId, async(req, res) => {
+            
             try{
                 console.log("access verified");
                 const {chatName, language} = req.body;
-                console.log('Received data:', { chatName, language });
-                this.chatManager.CreateChat(chatName, language)
+                const userId = req.userId;
+                console.log('Received data:', { chatName, language, userId });
+                this.chatManager.CreateChat(chatName, language, userId)
                 res.status(200).json({succes: true})
             } catch (err) {
                 res.status(500).json({succes: false});

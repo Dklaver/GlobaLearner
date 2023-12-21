@@ -52,7 +52,7 @@ export default function Chat() {
               <NavLink to='/register'>Don't have an account yet?</NavLink>
             </section>
           ) : (
-            
+            <>
             <section className='centered-container'>
               <h2 className='centered-header'>Chats</h2>
               {chats.map((chat) => (
@@ -64,10 +64,12 @@ export default function Chat() {
                 </section>
               ))}
             </section>
-          )}
-          <div>
+            <div>
             <NavLink className='button-Create' to="/chats/create">Create chat</NavLink>
-          </div>
+            </div>
+            </>
+          )}
+          
         </>
       );
     };

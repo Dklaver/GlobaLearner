@@ -37,5 +37,37 @@ module.exports = {
             // Pass the error to the error handling middleware
             next(err);
         }
+    },
+    GetUserId: (req, res, next) => {
+        
+        if (!req.headers['authorization']) {
+            throw createError.Unauthorized('Authorization header is missing');
+        }
+        
+        const authHeader = req.headers['authorization'];
+            const bearerToken = authHeader.split(' ');
+            const token = bearerToken[1];
+        console.log("token: " + token)
+        if (token) {
+            JWT.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+                if (err) {
+                    // Token verification failed
+                    if (err) {
+                        console.log(err)
+                        next();
+                    }
+                }
+                else {
+                    const userId = payload.id;
+                    req.userId = userId
+                    next();
+                }
+            }
+            )
+        
+        }else {
+            next();
+            throw createError.Unauthorized('no token found')
+        }
     }
 };

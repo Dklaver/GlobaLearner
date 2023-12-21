@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const { Server } = require("socket.io")
 
 //user
 const UserDal = require('./GlobalearnerDAL/UserManagerDal');
@@ -13,8 +14,6 @@ const ChatManager = require('./GlobalearnerBLL/Models/ChatManager');
 const ChatController = require('./GlobalearnerController/routes/Chat');
 
 const db = require("./GlobalearnerDAL/models");
-
-const chatRoute = require('./GlobalearnerController/routes/Chat');
 
 app.use(express.json());
 
@@ -41,7 +40,7 @@ module.exports = app;
 
 db.sequelize.sync().then((req) => {
     app.use(express.json());
-    app.listen(5000, () => {
+    const server = app.listen(5000, () => {
         console.log(`Server is listening to 5000`);
     })
 })

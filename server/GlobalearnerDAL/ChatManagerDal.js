@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const Chatmodel = require("./models/Chat");
+const UserChatModel = require("./models/UserChat");
 
 module.exports = class ChatDal {
 
@@ -14,6 +15,7 @@ module.exports = class ChatDal {
         });
 
         this.Chat = Chatmodel(this.sequelize, DataTypes);
+        this.UserChat = UserChatModel(this.sequelize, DataTypes);
     }
 
     async GetAllChats(){
@@ -29,14 +31,28 @@ module.exports = class ChatDal {
             console.log(err);
         }
     }
-    async CreateChat(chatName, language){
+    async CreateChat(chatName, language, userId){
         try{
             const newChat = await this.Chat.create({
                 name: chatName,
                 language: language,
             });
             const result = newChat.toJSON();
-            return result;
+            let jointResult
+            try{
+                const newChatId = result.id
+                console.log('new chat id: ' + newChatId)
+
+                const jointTable = await this.UserChat.create({
+                    userId: userId,
+                    chatId: newChatId
+                })
+                console.log("jointTable: " + jointTable)
+                jointResult = jointTable.toJSON();
+            }catch (err){
+                console.log(err)
+            }
+            return {chat: result, userChat: jointResult};
         }catch (err){
             console.log(err)
         }

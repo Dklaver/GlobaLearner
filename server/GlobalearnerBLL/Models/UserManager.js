@@ -49,4 +49,14 @@ module.exports = class UserManager extends iUserManager{
             return {message: err}
         }
     } 
+    
+    async findUserById(id){
+        try{
+            const user = await this.UserManagerDal.findUserById(id)
+            console.log(user)
+            return user;
+        }catch (err){
+            return {message: err}
+        }
+    }
 }
