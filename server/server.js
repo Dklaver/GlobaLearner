@@ -14,7 +14,8 @@ const ChatManager = require('./GlobalearnerBLL/Models/ChatManager');
 const ChatController = require('./GlobalearnerController/routes/Chat');
 
 //Message
-
+const MessageManagerDal = require('./GlobalearnerDAL/MessageManagerDal');
+const MessageManager = require('./GlobalearnerBLL/Models/MessageManager');
 const MessageController = require('./GlobalearnerController/routes/Message');
 
 const db = require("./GlobalearnerDAL/models");
@@ -39,8 +40,14 @@ let chatDal = new ChatDal();
 let chatBL = new ChatManager(chatDal)
 let chatController = new ChatController(chatBL)
 
+//Message
+let messageDal = new MessageManagerDal();
+let messageBL = new MessageManager(messageDal);
+let messageController = new MessageController(messageBL);
+
 app.use('/users', userController.router);
 app.use('/chat', chatController.router);
+app.use('/message', messageController.router);
 
 module.exports = app;
 
@@ -61,9 +68,30 @@ db.sequelize.sync().then((req) => {
     io.on("connection", (socket) => {
         console.log('user connected: '+ socket.id)
 
-        socket.on("send_message", (data) => {
-            socket.broadcast.emit("recieve_message", data)
+        socket.on("join_chat", (data) =>{
+            const chatId = data.chatId;
+            console.log("chatRoom chatId: " +chatId)
+            socket.join(chatId)
+            console.log(`User ${socket.id} joined chat ${chatId}`);
         })
+
+        socket.on("send_message", (data) => {
+
+            const senderId = socket.id;
+
+            console.log('senderId: '+senderId)
+            const chatId = data.chatId;
+            const message = data.message;
+
+            io.to(chatId).emit("recieve_message", {message, senderId})
+            console.log("chatId Websocket: " + chatId + " chatMessage Websocket: " + message)
+        })
+
+        socket.on("leave_chat", (data) => {
+            const chatId = data.chatId;
+            socket.leave(chatId);
+            console.log(`User ${socket.id} left chat ${chatId}`);
+        });
     })
 })
 

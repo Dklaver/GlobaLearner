@@ -1,26 +1,56 @@
 import { useEffect, useState } from "react"
 import io from 'socket.io-client'
-import { json, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from '../../../axios';
 import './Chatbar.css';
 import { NavLink } from 'react-router-dom';
 
 export default function ChatLayout() {
 
-  const { chatId } = useParams();
+  const  { chatId }  = useParams();
   const socket = io.connect("http://localhost:5000")
 
-  const [messageLeft, SetMessagesLeft] = useState([]);
-  const [messageRight, SetMessagesRight] = useState([]);
+  const [messagesLeft, setMessagesLeft] = useState([]);
+  const [messagesRight, setMessagesRight] = useState([]);
   const [lastMessage, SetLastMessage] = useState("");
   const [userOne, SetUserOne] = useState();
   const [userTwo, SetUserTwo] = useState();
+  const [totalJoined, SetTotalJoined] = useState(0);
+  const [socketio, SetSocketio] = useState();
 
   useEffect(() => {
-    socket.on("recieve_message", (data) => {
-      alert(data)
-    })
-  }, [socket])
+    const newSocket = io.connect("http://localhost:5000");
+
+    newSocket.on("recieve_message", (data) => {
+        handleReceivedMessage(data, newSocket);
+    });
+
+    newSocket.emit("join_chat", { chatId: chatId });
+
+    SetSocketio(newSocket);
+
+    return () => {
+        newSocket.disconnect();
+    };
+}, [chatId, messagesRight]);
+
+const handleReceivedMessage = (data, socket) => {
+  const { message, senderId } = data;
+  console.log("senderId: "+ senderId)
+  console.log("socketId: "+ socket.id)
+  // Check if the message is sent by the current user
+  const isCurrentUser = senderId === socket.id;
+
+  // Use the prevState parameter to ensure the correct order of execution
+  setMessagesLeft((prevState) => {
+      return isCurrentUser ? [...prevState, message] : prevState;
+  });
+
+  setMessagesRight((prevState) => {
+      return isCurrentUser ? prevState : [...prevState, message];
+  });
+};
+
 
   const handleInputValue = (e) => {
     e.preventDefault();
@@ -29,10 +59,33 @@ export default function ChatLayout() {
   //Need to save user1 and user2 in database pivot table
 
   useEffect(() => {
+    
+    console.log('CHATID: ' + chatId)
+    insertJoinedUserInChat();
     getUserByChatId();
     // getUserById();
-    // console.log('userOne: '+ userOne, 'userTwo: ' + userTwo);
   }, [])
+
+  useEffect(() => {
+    let totalUsersJoined = 0;
+    if (userOne){
+      totalUsersJoined++;
+    }
+    if (userTwo){
+      totalUsersJoined++;
+    }
+
+    SetTotalJoined(totalUsersJoined)
+  },[userOne, userTwo])
+
+  const insertJoinedUserInChat = async() =>{
+
+    const response = await axios.post("chat/insertUser", JSON.stringify({chatId: chatId}), {
+      headers: {"Content-Type": 'application/json'},
+      withCredentials: true,
+    })
+    console.log("insertJoinedUserInChatRESPONSE: " + JSON.stringify(response))
+  } 
 
   const getUserByChatId = async () => {
     const response = await axios.get("users/getByChatId", {
@@ -45,41 +98,39 @@ export default function ChatLayout() {
         withCredentials: true,
       });
     const userData = response.data;
-
-    console.log(userData);
+    
+    console.log("Userdata: " + JSON.stringify(userData));
+    if (userData.users.length)
+    SetUserOne(userData.users[0].name);
+    if (userData.users.length > 1){
+      SetUserTwo(userData.users[1].name);
+    }
+  
   }
 
-  // const getUserById = async() => {
-  //   const userData = await axios.get("users/getById");
+  const leaveChat = () => {
+    socket.emit("leave_chat", { chatId: chatId });
+};
 
-  //   const responseData = userData.data;
-  //   const userName = responseData.user.name;
-  //   console.log("userName: " + userName);
+  const sendMessage = (e) => {
+    e.preventDefault();
 
-  //   const user = responseData;
-  //   console.log('user ' + JSON.stringify(user))
-  //   if (!userOne){
-  //     SetUserOne(userName)
-  //     console.log(" user is set to user 1")
-  //   }
-  //   else if (!userTwo && userOne === user.name){
-  //     SetUserTwo(userName)
-  //     console.log(userTwo + " user is set to user 2")
-  //   }else {
-  //     console.log("both users are in capacity");
-  //   }
-  // }
-
-  const sendMessage = (data) => {
-    socket.emit("send_message", lastMessage)
+    if (lastMessage.trim() === "") {
+      // Don't send empty messages
+      return;
+    }
 
     const messageData = {
       chatId: chatId,
       //userId gets send via cookie
       message: lastMessage
     }
+    socket.emit("send_message", messageData);
+    
+    SetLastMessage("");
 
   }
+
 
   return (
     <div className="full-container">
@@ -89,13 +140,13 @@ export default function ChatLayout() {
       <body>
         <h1 className="title">Chat {chatId}</h1>
         <div>
-          <NavLink className='button-back' to="/chats">&lt;</NavLink>
+          <NavLink onClick={leaveChat} className='button-back' to="/chats" >&lt;</NavLink>
         </div>
         <section className="left-section">
           <h1 className="joined-users">
             joined: {userOne}, {userTwo}
           </h1>
-          <h3 className="clients-total" id="clients-total">total joined: 2</h3>
+          <h3 className="clients-total" id="clients-total">total joined: {totalJoined}</h3>
         </section>
         <div className="main">
           <div className="name">
@@ -103,15 +154,18 @@ export default function ChatLayout() {
           </div>
 
           <ul className="message-container" id="message-container">
-            <li className="message-left">
-              <p className="message">Let him..</p>
-              <span className="message-left-span">daniel • 12/20/2023 11:48</span>
-            </li>
-
-            <li className="message-right">
-              <p className="message">COOK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
-              <span className="message-right-span">Juda • 12/20/2023 11:49</span>
-            </li>
+          {messagesLeft.map((message, index) => (
+          <li key={index} className="message-left">
+            <p className="message">{message}</p>
+            {/* Add your user and timestamp details here */}
+          </li>
+        ))}
+        {messagesRight.map((message, index) => (
+          <li key={index} className="message-right">
+            <p className="message">{message}</p>
+            {/* Add your user and timestamp details here */}
+          </li>
+        ))}
 
             <li className="message-feedback">
               <p className="feedback" id='feedback'> daniel is typing a message...</p>

@@ -32,6 +32,22 @@ class ChatController{
                 res.status(500).json({succes: false});
             }
         });
+
+        this.router.post("/insertUser", GetUserId, async(req, res) => {
+            try{
+                const userId = req.userId;
+                const chatId = req.body.chatId;
+
+                console.log("Req.body for ChatId: " + JSON.stringify(chatId))
+
+                this.chatManager.insertUserInChat(chatId, userId);
+                res.status(200).json({succes:true});
+            }catch (err){
+                console.log(err)
+                res.status(500).json({ err })
+            }
+            
+        })
     
     }
     

@@ -57,4 +57,33 @@ module.exports = class ChatDal {
             console.log(err)
         }
     }
+
+    async insertUserInChat(chatId, userId) {
+        try {
+          console.log("chatId: " + chatId);
+          const checkUser = await this.UserChat.findAll({
+            where: {
+              userId: userId,
+              chatId: chatId,
+            },
+          });
+      
+          if (!checkUser.length) {
+            try {
+              const insertedUser = await this.UserChat.create({
+                userId: userId,
+                chatId: chatId,
+              });
+      
+              // Additional logic if needed after user insertion
+            } catch (err) {
+              console.log(err);
+            }
+          } else {
+            return { message: 'user already exists' };
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
 }

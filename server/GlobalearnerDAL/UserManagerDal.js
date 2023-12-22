@@ -87,9 +87,9 @@ module.exports = class UserDal extends iUserManagerDal {
     async getUsersByChatId(chatId) {
         try {
             const uid = await this.UserChat.findAll({
-                where: chatId = chatId,
+                where: {chatId: chatId},
                 attributes: ['userId'],
-                raw: true,
+                raw: true
             });
             console.log("usersByChatId "+ uid)
             
