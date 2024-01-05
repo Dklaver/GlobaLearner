@@ -1,5 +1,9 @@
 module.exports = class MessageManager{
-    constructor(messageManagerDal){
-        this.messageManagerDal = messageManagerDal;
+    constructor(MessageManagerDal){
+        this.MessageManagerDal = MessageManagerDal;
+    }
+
+    async insertMessage(message, userId, chatId){
+        return this.MessageManagerDal.insertMessage(message, userId, chatId)
     }
 }

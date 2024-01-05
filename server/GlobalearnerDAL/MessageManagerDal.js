@@ -13,4 +13,20 @@ module.exports = class MessageManagerDal{
 
         this.Message = MessageModel(this.sequelize, DataTypes);
     }
+
+    async insertMessage(message, userId, chatId){
+        try{
+            console.log("recieved message Data: " + JSON.stringify({message, userId, chatId}))
+
+            const newMessage = await this.Message.create({
+                message: message,
+                userId: userId,
+                chatId: chatId
+            })
+            return ({message: "saved message: " + newMessage})
+        }catch (err){
+            console.log(err)
+            return ({message: "could not save message: " + err})
+        }
+    }
 }

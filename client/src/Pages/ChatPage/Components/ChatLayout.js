@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import io from 'socket.io-client'
 import { useParams } from "react-router-dom";
 import axios from '../../../axios';
@@ -8,7 +8,8 @@ import { NavLink } from 'react-router-dom';
 export default function ChatLayout() {
 
   const  { chatId }  = useParams();
-  const socket = io.connect("http://localhost:5000")
+ 
+  const messageContainerRef = useRef();
 
   const [messagesLeft, setMessagesLeft] = useState([]);
   const [messagesRight, setMessagesRight] = useState([]);
@@ -16,7 +17,12 @@ export default function ChatLayout() {
   const [userOne, SetUserOne] = useState();
   const [userTwo, SetUserTwo] = useState();
   const [totalJoined, SetTotalJoined] = useState(0);
-  const [socketio, SetSocketio] = useState();
+  const [socket, SetSocketio] = useState();
+  // const [token, SetToken] = useState("");
+
+  useEffect(() => {
+    messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+  }, [messagesLeft, messagesRight]);
 
   useEffect(() => {
     const newSocket = io.connect("http://localhost:5000");
@@ -34,20 +40,25 @@ export default function ChatLayout() {
     };
 }, [chatId, messagesRight]);
 
+useEffect(() =>{
+ 
+})
+
 const handleReceivedMessage = (data, socket) => {
-  const { message, senderId } = data;
+  const { message, senderId, timestamp } = data;
   console.log("senderId: "+ senderId)
   console.log("socketId: "+ socket.id)
   // Check if the message is sent by the current user
   const isCurrentUser = senderId === socket.id;
 
+  const messageWithTimeStamp = { text: message, timestamp: timestamp, isCurrentUser}
   // Use the prevState parameter to ensure the correct order of execution
   setMessagesLeft((prevState) => {
-      return isCurrentUser ? [...prevState, message] : prevState;
+      return isCurrentUser ? [...prevState, messageWithTimeStamp] : prevState;
   });
 
   setMessagesRight((prevState) => {
-      return isCurrentUser ? prevState : [...prevState, message];
+      return isCurrentUser ? prevState : [...prevState, messageWithTimeStamp];
   });
 };
 
@@ -62,7 +73,7 @@ const handleReceivedMessage = (data, socket) => {
     
     console.log('CHATID: ' + chatId)
     insertJoinedUserInChat();
-    getUserByChatId();
+    getUserByChatId();  
     // getUserById();
   }, [])
 
@@ -74,7 +85,9 @@ const handleReceivedMessage = (data, socket) => {
     if (userTwo){
       totalUsersJoined++;
     }
-
+    const jwt = localStorage.getItem('jwt')
+    // SetToken(jwt)
+    // console.log("token: " + token)
     SetTotalJoined(totalUsersJoined)
   },[userOne, userTwo])
 
@@ -119,16 +132,32 @@ const handleReceivedMessage = (data, socket) => {
       // Don't send empty messages
       return;
     }
-
     const messageData = {
       chatId: chatId,
-      //userId gets send via cookie
+      timestamp: new Date().toISOString(),
       message: lastMessage
     }
     socket.emit("send_message", messageData);
-    
-    SetLastMessage("");
 
+    handleMessage();
+    SetLastMessage("");
+    
+  }
+
+  const handleMessage = async() => {
+    try{
+      
+      const response = await axios.post('message/insertMessage', JSON.stringify({chatId, lastMessage}),
+      {
+        headers: {"Content-Type": 'application/json'},
+        withCredentials: true,
+      });
+
+      console.log("sending message response: " + JSON.stringify(response))
+    }catch (err){
+      console.log(err)
+    }
+    
   }
 
 
@@ -152,35 +181,28 @@ const handleReceivedMessage = (data, socket) => {
           <div className="name">
             <span><i className="far fa-user"></i></span>
           </div>
-
-          <ul className="message-container" id="message-container">
-          {messagesLeft.map((message, index) => (
-          <li key={index} className="message-left">
-            <p className="message">{message}</p>
-            {/* Add your user and timestamp details here */}
-          </li>
-        ))}
-        {messagesRight.map((message, index) => (
-          <li key={index} className="message-right">
-            <p className="message">{message}</p>
-            {/* Add your user and timestamp details here */}
-          </li>
-        ))}
-
+  
+          <ul className="message-container" id="message-container" ref={messageContainerRef}>
+            {messagesLeft.concat(messagesRight).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((message, index) => (
+              <li key={index} className={message.isCurrentUser ? "message-left" : "message-right"}>
+                <p className="message">{message.text}</p>
+                {/* Add your user and timestamp details here */}
+              </li>
+            ))}
+            
             <li className="message-feedback">
               <p className="feedback" id='feedback'> daniel is typing a message...</p>
             </li>
           </ul>
-
+  
           <form className="message-form" id="message-form">
-            <input type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} />
+            <input type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autocomplete="off" />
             <div className="v-divider"></div>
-            <button type="submit" className="send-button" onClick={sendMessage}>send <span>➡️</span></button>
+            <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
           </form>
-
+  
         </div>
-
+  
       </body>
     </div>
-  )
-}
+  )}
