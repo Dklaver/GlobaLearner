@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from '../../../axios';
 import './Chatbar.css';
 import { NavLink } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 export default function ChatLayout() {
 
@@ -18,7 +19,66 @@ export default function ChatLayout() {
   const [userTwo, SetUserTwo] = useState();
   const [totalJoined, SetTotalJoined] = useState(0);
   const [socket, SetSocketio] = useState();
-  // const [token, SetToken] = useState("");
+  
+ 
+  useEffect(() => {
+    //this useEffect is for getting all previous messages
+    getAllMessagesFromChat()
+    
+  },[])
+
+  const getAllMessagesFromChat = async () => {
+    try {
+      const allMessages = await axios.get("message/getFromChat", {
+        params: {
+          chatId: chatId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const responseData = allMessages.data.response;
+
+      const parsedResponse = JSON.parse(responseData);
+
+      console.log('responseData for getting all messages: ' + JSON.stringify(responseData))
+
+      const jwt = localStorage.getItem('jwt');
+      const decodedToken = jwt ? jwtDecode(jwt) : null;
+      console.log("User ID == " + JSON.stringify(decodedToken.id))
+      if (!decodedToken || !decodedToken.id) {
+        
+        console.error("User ID not found in the JWT");
+        return;
+      }
+
+      const userMessages = parsedResponse.map(message => {
+        const { timestamp, userId } = message;
+
+        console.log("timestamp: " + timestamp, 'userId: ' + userId)
+        const isCurrentUser = userId === decodedToken.id;
+
+        return {
+          text: message.message,
+          timestamp: timestamp,
+          isCurrentUser: isCurrentUser
+        };
+      });
+
+      const sortedMessages = userMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      const messagesLeft = sortedMessages.filter(message => message.isCurrentUser);
+      console.log("messages left: " + JSON.stringify(messagesLeft))
+      const messagesRight = sortedMessages.filter(message => !message.isCurrentUser);
+      console.log("messages right " + JSON.stringify(messagesRight))
+
+      setMessagesLeft(messagesLeft);
+      setMessagesRight(messagesRight);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
@@ -85,7 +145,7 @@ const handleReceivedMessage = (data, socket) => {
     if (userTwo){
       totalUsersJoined++;
     }
-    const jwt = localStorage.getItem('jwt')
+    
     // SetToken(jwt)
     // console.log("token: " + token)
     SetTotalJoined(totalUsersJoined)
@@ -139,15 +199,17 @@ const handleReceivedMessage = (data, socket) => {
     }
     socket.emit("send_message", messageData);
 
-    handleMessage();
+    console.log("sending message data: " + JSON.stringify(messageData))
+
+    handleMessage(messageData);
     SetLastMessage("");
     
   }
 
-  const handleMessage = async() => {
+  const handleMessage = async(messageData) => {
     try{
       
-      const response = await axios.post('message/insertMessage', JSON.stringify({chatId, lastMessage}),
+      const response = await axios.post('message/insertMessage', JSON.stringify({messageData}),
       {
         headers: {"Content-Type": 'application/json'},
         withCredentials: true,

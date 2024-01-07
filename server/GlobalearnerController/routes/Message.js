@@ -9,13 +9,30 @@ class MessageController {
 
         this.router.post("/insertMessage", GetUserId, async (req, res) => {
             const userId = req.userId;
-            const {lastMessage, chatId} = req.body;
+            const {messageData} = req.body;
+            const chatId = messageData.chatId;
+            const lastMessage = messageData.message
+            const timestamp = messageData.timestamp
             try{
-                const newChat = await this.messageManager.insertMessage(lastMessage, userId, chatId)
+                console.log("messageData: " + JSON.stringify(messageData))
+                const newChat = await this.messageManager.insertMessage(lastMessage, userId, chatId, timestamp)
                 res.status(200).json({message: newChat})
             }catch (err){
                 console.log(err)
                 res.status(500).json({message: "something went wrong"})
+            }
+        })
+
+        this.router.get("/getFromChat", async (req, res) => {
+            
+            try{
+                const chatId = req.query.chatId;
+                console.log("getting all chats from chat id: " + chatId)
+                const response = await this.messageManager.getAllMessagesFromChatId(chatId)
+
+                res.status(200).json({response})
+            }catch (err){
+                res.status(500).json({message: "something  went wrong loading all messages" + err})
             }
         })
     }

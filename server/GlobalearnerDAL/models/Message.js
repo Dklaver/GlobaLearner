@@ -11,6 +11,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
           },
+          timestamp: {
+            type: DataTypes.DATE,
+            allowNull: false,
+          },
           userId: {
             type: DataTypes.INTEGER,
             primaryKey: false,

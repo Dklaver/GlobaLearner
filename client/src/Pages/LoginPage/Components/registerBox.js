@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import './authentication.css';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import axios from "../../../axios";
 
 const USER_REGEX = /^[a-zA-Z0-9]{4,24}$/;
@@ -83,13 +83,14 @@ export default function Register() {
         }
     }
 
+
     return (
         <>
         {succes ? (
             <section>
                 <h1>Succes!</h1>
                 <p>
-                    <NavLink to="/">Home</NavLink>
+                    <Link to="/">Home</Link>
                 </p>
             </section>
         ) : (
