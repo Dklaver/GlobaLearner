@@ -26,10 +26,16 @@ class ChatController{
                 const {chatName, language} = req.body;
                 const userId = req.userId;
                 console.log('Received data:', { chatName, language, userId });
-                this.chatManager.CreateChat(chatName, language, userId)
-                res.status(200).json({succes: true})
+                const result = await this.chatManager.CreateChat(chatName, language, userId)
+                
+                console.log(JSON.stringify("create chat result: " + JSON.stringify(result)))
+
+                const newChatId = result.chat.id;
+                console.log(JSON.stringify(newChatId))
+                res.status(200).json({chatId: newChatId, succes: true})
             } catch (err) {
-                res.status(500).json({succes: false});
+                console.log(JSON.stringify(err))
+                res.status(500).json({ succes: false});
             }
         });
 

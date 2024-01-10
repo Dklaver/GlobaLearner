@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import './authentication.css';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate  } from "react-router-dom";
 import axios from '../../../axios';
 
 export default function Login() {
 
+    const navigate = useNavigate();
     const userRef = useRef();
     const errRef = useRef();
 
@@ -13,6 +14,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [allowed, setAllow] = useState();
     const [status, setStatus] = useState('');
+    
 
     useEffect(() => {
         userRef.current.focus();
@@ -43,6 +45,11 @@ export default function Login() {
         if (success === false){
             setError(message)
         }
+        else{
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
+        }
         }catch (err) {
             if (!err.response) {
                 console.log(err)
@@ -52,6 +59,8 @@ export default function Login() {
             }
             }
         }
+    
+        
 
     return (
         <>
@@ -59,7 +68,8 @@ export default function Login() {
             <section>
                 <h1>{status}</h1>
                 <p>
-                    <NavLink to="/">Home</NavLink>
+                    <p>You now have access to the website!</p>
+                    <NavLink data-testid="cypress-loginToHome" to="/">home</NavLink>
                 </p>
             </section>
         ) : (
@@ -68,7 +78,8 @@ export default function Login() {
             <h1>Sign In</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor='username'>Username:</label>
-                <input 
+                <input
+                data-testid="cypress-LoginUsername" 
                 type='text' 
                 id='username'
                 ref={userRef}
@@ -78,14 +89,15 @@ export default function Login() {
                 required
                 />
                 <label htmlFor='password'>Password:</label>
-                <input 
+                <input
+                data-testid="cypress-loginPassword"  
                 type='password' 
                 id='password'
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 required
                 />
-                <button>Sign in</button>
+                <button data-testid="cypress-loginSignin">Sign in</button>
             </form>
             <p>
             <span className='hasNoAccount'>

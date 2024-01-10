@@ -39,14 +39,14 @@ export default function Navbar() {
     }
     return (
         <nav className="nav">
-            <NavLink to='/' className={"site-title"}>Globalearner</NavLink>
+            <NavLink data-testid="cypress-navtitle" to='/' className={"site-title"}>Globalearner</NavLink>
             <h3>welcome! {userName}</h3>
             <ul>
                 <li>
-                    <NavLink to='/chats'>chat</NavLink>
+                    <NavLink data-testid="cypress-navchat" to='/chats'>chat</NavLink>
                 </li>
                 <li>
-                    <NavLink to='/register'>register</NavLink>
+                    <NavLink data-testid="cypress-navregister" to='/register'>register</NavLink>
                 </li>
             </ul>
         </nav>

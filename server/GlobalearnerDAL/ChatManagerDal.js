@@ -52,6 +52,7 @@ module.exports = class ChatDal {
             }catch (err){
                 console.log(err)
             }
+            console.log("result: " + JSON.stringify(result))
             return {chat: result, userChat: jointResult};
         }catch (err){
             console.log(err)

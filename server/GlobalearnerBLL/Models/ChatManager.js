@@ -8,7 +8,9 @@ module.exports = class ChatManager {
         return this.ChatManagerDal.GetAllChats();
     }
     async CreateChat(chatName, language, userId){
-        return this.ChatManagerDal.CreateChat(chatName, language, userId);
+        const result = await this.ChatManagerDal.CreateChat(chatName, language, userId);
+        
+        return result;
     }
    async insertUserInChat(chatId, userId){
     return this.ChatManagerDal.insertUserInChat(chatId, userId)

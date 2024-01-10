@@ -83,12 +83,13 @@ export default function Register() {
         }
     }
 
+    
 
     return (
         <>
         {succes ? (
             <section>
-                <h1>Succes!</h1>
+                <h1 data-testid="cypress-loginSucces">Succes!</h1>
                 <p>
                     <Link to="/">Home</Link>
                 </p>
@@ -104,7 +105,8 @@ export default function Register() {
                 <span className={validName || !user ? "hide" : "invalid"}><FontAwesomeIcon icon={faTimes} />
                 </span>
                 </label>
-                <input type="text" 
+                <input type="text"
+                data-testid="cypress-registerUsername" 
                 id="username" 
                 ref={userRef} 
                 autoComplete="off" 
@@ -114,7 +116,7 @@ export default function Register() {
                 onFocus={() => setUserFocus(true)} 
                 onBlur={() => setUserFocus(false)}
                 />
-                <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}><FontAwesomeIcon icon={faInfoCircle}/> 4 to 24 characters.<br />
+                <p data-testid="cypress-registerUsernameCheck" id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}><FontAwesomeIcon icon={faInfoCircle}/> 4 to 24 characters.<br />
                 Must begin with a letter.<br/>
                 letters, numbers allowed</p>
                 
@@ -125,6 +127,7 @@ export default function Register() {
                 </span>
                 </label>
                 <input type="password"
+                data-testid="cypress-registerPassword" 
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -146,6 +149,7 @@ export default function Register() {
                 </label>
                 <input type="password"
                 id="confirmPwd"
+                data-testid="cypress-registerMatch"
                 onChange={(e) => setMatch(e.target.value)}
                 required
                 aria-invalid={validMatch ? "false" : "true"}
@@ -153,12 +157,12 @@ export default function Register() {
                 onFocus={() => setMatchFocus(true)}
                 onBlur={() => setMatchFocus(false)}
                 />
-                <p id="confirmNote" className={MatchFocus && !validMatch ? "instructions" : "offscreen"}><FontAwesomeIcon icon={faInfoCircle}/> Must be the same as the password above.<br /></p>
+                <p data-testid="cypress-passwordMatch" id="confirmNote" className={MatchFocus && !validMatch ? "instructions" : "offscreen"}><FontAwesomeIcon icon={faInfoCircle}/> Must be the same as the password above.<br /></p>
                 
-                <button disabled={!validName || !validPassword || !validMatch ? true : false}>Sign Up</button>
+                <button data-testid="cypress-RegisterSignup" disabled={!validName || !validPassword || !validMatch ? true : false}>Sign Up</button>
 
                 <p>
-                    <span className="hasAccount"> <NavLink to='/login'>Already have an account?</NavLink></span> 
+                    <span data-testid="cypress-registerToLogin" className="hasAccount"> <NavLink to='/login'>Already have an account?</NavLink></span> 
                 </p>
 
             </form>

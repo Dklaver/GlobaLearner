@@ -258,7 +258,7 @@ const handleReceivedMessage = (data, socket) => {
           </ul>
   
           <form className="message-form" id="message-form">
-            <input type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autocomplete="off" />
+            <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autocomplete="off" />
             <div className="v-divider"></div>
             <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
           </form>

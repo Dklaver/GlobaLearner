@@ -65,7 +65,7 @@ export default function Chat() {
               ))}
             </section>
             <div>
-            <NavLink className='button-Create' to="/chats/create">Create chat</NavLink>
+            <NavLink data-testid="cypress-createChatButton" className='button-Create' to="/chats/create">Create chat</NavLink>
             </div>
             </>
           )}
