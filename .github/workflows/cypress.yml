@@ -10,6 +10,15 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: test_database
+        ports:
+          - 5000:5000 # Adjust the port to match your server port
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,22 +41,22 @@ jobs:
           cd client
           npm run build
 
-      # Install dependencies for server
-      - name: Install dependencies for server
+      # Start server
+      - name: Start server
         run: |
           cd server
           npm install
+          npm run dev
 
-      # Start server and client
-      - name: Start server and client
+      # Start client
+      - name: Start client
         run: |
-          cd server
-          npm run dev &
+          cd client
+          npm start
 
-          cd ../client
-          npm start &
-
-          npx wait-on http://127.0.0.1:5000 http://127.0.0.1:3000
+      # Wait for both server and client to be ready
+      - name: Wait for server and client
+        run: npx wait-on http://127.0.0.1:5000 http://127.0.0.1:3000
 
       # Run Cypress tests
       - name: Run Cypress tests
