@@ -23,62 +23,66 @@ export default function ChatLayout() {
  
   useEffect(() => {
     //this useEffect is for getting all previous messages
+    const getAllMessagesFromChat = async () => {
+      
+      try {
+        
+        const allMessages = await axios.get("message/getFromChat", {
+          params: {
+            chatId: chatId,
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+        const responseData = allMessages.data.response;
+  
+        const parsedResponse = JSON.parse(responseData);
+  
+        console.log('responseData for getting all messages: ' + JSON.stringify(responseData))
+  
+        const jwt = localStorage.getItem('jwt');
+        const decodedToken = jwt ? jwtDecode(jwt) : null;
+        console.log("User ID == " + JSON.stringify(decodedToken.id))
+        if (!decodedToken || !decodedToken.id) {
+          
+          console.error("User ID not found in the JWT");
+          return;
+        }
+  
+        const userMessages = parsedResponse.map(message => {
+          const { timestamp, userId } = message;
+  
+          console.log("timestamp: " + timestamp, 'userId: ' + userId)
+          const isCurrentUser = userId === decodedToken.id;
+  
+          return {
+            text: message.message,
+            timestamp: timestamp,
+            isCurrentUser: isCurrentUser
+          };
+        });
+  
+        const sortedMessages = userMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  
+        const messagesLeft = sortedMessages.filter(message => message.isCurrentUser);
+        console.log("messages left: " + JSON.stringify(messagesLeft))
+        const messagesRight = sortedMessages.filter(message => !message.isCurrentUser);
+        console.log("messages right " + JSON.stringify(messagesRight))
+  
+        setMessagesLeft(messagesLeft);
+        setMessagesRight(messagesRight);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     getAllMessagesFromChat()
     
-  },[])
+  },[chatId])
 
-  const getAllMessagesFromChat = async () => {
-    try {
-      const allMessages = await axios.get("message/getFromChat", {
-        params: {
-          chatId: chatId,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      const responseData = allMessages.data.response;
-
-      const parsedResponse = JSON.parse(responseData);
-
-      console.log('responseData for getting all messages: ' + JSON.stringify(responseData))
-
-      const jwt = localStorage.getItem('jwt');
-      const decodedToken = jwt ? jwtDecode(jwt) : null;
-      console.log("User ID == " + JSON.stringify(decodedToken.id))
-      if (!decodedToken || !decodedToken.id) {
-        
-        console.error("User ID not found in the JWT");
-        return;
-      }
-
-      const userMessages = parsedResponse.map(message => {
-        const { timestamp, userId } = message;
-
-        console.log("timestamp: " + timestamp, 'userId: ' + userId)
-        const isCurrentUser = userId === decodedToken.id;
-
-        return {
-          text: message.message,
-          timestamp: timestamp,
-          isCurrentUser: isCurrentUser
-        };
-      });
-
-      const sortedMessages = userMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-      const messagesLeft = sortedMessages.filter(message => message.isCurrentUser);
-      console.log("messages left: " + JSON.stringify(messagesLeft))
-      const messagesRight = sortedMessages.filter(message => !message.isCurrentUser);
-      console.log("messages right " + JSON.stringify(messagesRight))
-
-      setMessagesLeft(messagesLeft);
-      setMessagesRight(messagesRight);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
 
   useEffect(() => {
     messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
@@ -100,9 +104,6 @@ export default function ChatLayout() {
     };
 }, [chatId, messagesRight]);
 
-useEffect(() =>{
- 
-})
 
 const handleReceivedMessage = (data, socket) => {
   const { message, senderId, timestamp } = data;
@@ -132,10 +133,39 @@ const handleReceivedMessage = (data, socket) => {
   useEffect(() => {
     
     console.log('CHATID: ' + chatId)
+    const insertJoinedUserInChat = async() =>{
+
+      const response = await axios.post("chat/insertUser", JSON.stringify({chatId: chatId}), {
+        headers: {"Content-Type": 'application/json'},
+        withCredentials: true,
+      })
+      console.log("insertJoinedUserInChatRESPONSE: " + JSON.stringify(response))
+    } 
+  
+    const getUserByChatId = async () => {
+      const response = await axios.get("users/getByChatId", {
+        params: {
+          chatId: chatId,
+        }
+      },
+        {
+          headers: { "Content-Type": 'application/json' },
+          withCredentials: true,
+        });
+      const userData = response.data;
+      
+      console.log("Userdata: " + JSON.stringify(userData));
+      if (userData.users.length)
+      SetUserOne(userData.users[0].name);
+      if (userData.users.length > 1){
+        SetUserTwo(userData.users[1].name);
+      }
+    
+    }
     insertJoinedUserInChat();
     getUserByChatId();  
     // getUserById();
-  }, [])
+  }, [chatId])
 
   useEffect(() => {
     let totalUsersJoined = 0;
@@ -151,35 +181,7 @@ const handleReceivedMessage = (data, socket) => {
     SetTotalJoined(totalUsersJoined)
   },[userOne, userTwo])
 
-  const insertJoinedUserInChat = async() =>{
-
-    const response = await axios.post("chat/insertUser", JSON.stringify({chatId: chatId}), {
-      headers: {"Content-Type": 'application/json'},
-      withCredentials: true,
-    })
-    console.log("insertJoinedUserInChatRESPONSE: " + JSON.stringify(response))
-  } 
-
-  const getUserByChatId = async () => {
-    const response = await axios.get("users/getByChatId", {
-      params: {
-        chatId: chatId,
-      }
-    },
-      {
-        headers: { "Content-Type": 'application/json' },
-        withCredentials: true,
-      });
-    const userData = response.data;
-    
-    console.log("Userdata: " + JSON.stringify(userData));
-    if (userData.users.length)
-    SetUserOne(userData.users[0].name);
-    if (userData.users.length > 1){
-      SetUserTwo(userData.users[1].name);
-    }
   
-  }
 
   const leaveChat = () => {
     socket.emit("leave_chat", { chatId: chatId });

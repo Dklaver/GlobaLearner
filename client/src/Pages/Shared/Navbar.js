@@ -6,36 +6,38 @@ import axios from "../../axios";
 
 
 export default function Navbar() {
-    const jwt = localStorage.getItem('jwt')
+    
 
     const [userName, SetUserName] = useState("") 
     
 
     useEffect(() => {
+        const isLoggedIn = async() => {
+            try{
+                const jwt = localStorage.getItem('jwt')
+                if (jwt){
+        
+                    const response = await axios.get("users/getById", {
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        withCredentials: true,
+                    });
+                    console.log("userNameResponse: " + JSON.stringify(response))
+    
+                    const responseData = response.data;
+                    console.log("user logged in: " + JSON.stringify(responseData))
+                    SetUserName(responseData.user.name)
+                    
+                } 
+            }catch (err){
+                console.log(err)
+            }
+        }
         isLoggedIn()
     },[])
 
-    const isLoggedIn = async() => {
-        try{
-            if (jwt){
     
-                const response = await axios.get("users/getById", {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    withCredentials: true,
-                });
-                console.log("userNameResponse: " + JSON.stringify(response))
-
-                const responseData = response.data;
-                console.log("user logged in: " + JSON.stringify(responseData))
-                SetUserName(responseData.user.name)
-                
-            } 
-        }catch (err){
-            console.log(err)
-        }
-    }
     return (
         <nav className="nav">
             <NavLink data-testid="cypress-navtitle" to='/' className={"site-title"}>Globalearner</NavLink>
