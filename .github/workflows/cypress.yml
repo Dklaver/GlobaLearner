@@ -6,6 +6,13 @@ jobs:
     name: E2E on Chrome
     steps:
       - uses: actions/checkout@v4
+
+      # Add a step to install dependencies and generate lockfile
+      - name: Install Dependencies
+        run: |
+          npm install
+          # or yarn install if you're using Yarn
+
       - uses: cypress-io/github-action@v6
         with:
           browser: chrome
