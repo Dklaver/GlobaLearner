@@ -46,6 +46,9 @@ describe('after login', () => {
 
       expect(jwtToken).to.not.be.null;
     }),
+    
+    cy.wait(3000);
+
     cy.get('[data-testid="cypress-createChatButton"]').should('exist');
     cy.get('[data-testid="cypress-createChatButton"]').click();
 
