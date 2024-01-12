@@ -40,6 +40,7 @@ describe('after login', () => {
     
     cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat').click();
 
+    cy.wait(3000);
     // go to chat
     cy.window().then((win) => {
       const jwtToken = win.localStorage.getItem('jwt');
