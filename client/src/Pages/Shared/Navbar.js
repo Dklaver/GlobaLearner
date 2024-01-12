@@ -13,7 +13,7 @@ export default function Navbar() {
 
     useEffect(() => {
         isLoggedIn()
-    },[isLoggedIn])
+    },[])
 
     const isLoggedIn = async() => {
         try{
