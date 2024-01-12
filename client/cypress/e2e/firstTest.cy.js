@@ -29,12 +29,12 @@ describe('end to end', () => {
     cy.get('[data-testid="cypress-loginSignin"]').should("exist").click();
 
     // back to home
+    cy.wait(3000);
     
-    
-
+    cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat').click();
 
     // go to chat
-    cy.visit('http://localhost:3000/chat')
+    
 
     cy.get('[data-testid="cypress-createChatButton"]').should("exist").should('have.text', 'Create chat').click();
 

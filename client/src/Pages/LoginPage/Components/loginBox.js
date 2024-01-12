@@ -47,7 +47,11 @@ export default function Login() {
         }
         else{
             
-            navigate('/');
+            setTimeout(() => {
+                // Your navigation logic here
+                navigate('/');
+              }, 1000);
+            
             
         }
         }catch (err) {
