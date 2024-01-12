@@ -20,6 +20,8 @@ jobs:
         run: |
           cd client
           npm install
+          cd server
+          npm install
 
       # Build the application
       - name: Build application
@@ -33,15 +35,15 @@ jobs:
           cd client
           npm start & npx wait-on http://127.0.0.1:3000
       
-      - name: Build application
+      - name: Build server
         run: |
           cd server
           npm run build
 
       # Run Cypress tests
-      - name: Start application
+      - name: Start server
         run: |
-          cd client
+          cd server
           npm run dev & npx wait-on http://127.0.0.1:5000
       
           
