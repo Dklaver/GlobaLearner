@@ -6,9 +6,9 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     env:
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: studmysql01.fhict.local
+      DB_USER: dbi512957
+      DB_PASSWORD: admin
     steps:
       - name: Checkout
         uses: actions/checkout@v4
