@@ -42,6 +42,8 @@ jobs:
         run: |
           cd server
           npm install
+      - name: Configure environment variables
+        run: echo "DB_USERNAME=dbi512957\nDB_PASSWORD=admin\nDB_DATABASE=dbi512957\nDB_HOST=studmysql01.fhict.local" >> .env
 
       # Build server
       - name: Build server
