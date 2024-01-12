@@ -14,8 +14,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: 'client/package-lock.json'
+          
   
       # Install dependencies and run Cypress tests
       - name: Install dependencies and run Cypress
