@@ -6,13 +6,13 @@ module.exports = class ChatDal {
 
     constructor(){
 
-        this.sequelize = new Sequelize({
-            dialect: "mysql",
-            host: "studmysql01.fhict.local",
-            username: "dbi512957",
-            password: "admin",
-            database: "dbi512957"
-        });
+      this.sequelize = new Sequelize({
+        dialect: "mysql",
+        host: process.env.DB_HOST,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
+    });
 
         this.Chat = Chatmodel(this.sequelize, DataTypes);
         this.UserChat = UserChatModel(this.sequelize, DataTypes);

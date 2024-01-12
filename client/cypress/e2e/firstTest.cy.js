@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 describe('end to end', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/')
@@ -46,6 +48,8 @@ describe('after login', () => {
       const jwtToken = win.localStorage.getItem('jwt');
 
       expect(jwtToken).to.not.be.null;
+
+      cy.log('token: ', jwtToken)
     }),
     
     cy.wait(3000);

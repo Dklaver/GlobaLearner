@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const UserModel = require("./models/User");
 const iUserManagerDal = require("../InterfaceLayer/iUserManagerDal");
 const UserChatModel = require("./models/UserChat");
+require('dotenv').config();
 
 module.exports = class UserDal extends iUserManagerDal {
     constructor() {
@@ -9,10 +10,10 @@ module.exports = class UserDal extends iUserManagerDal {
 
         this.sequelize = new Sequelize({
             dialect: "mysql",
-            host: "studmysql01.fhict.local",
-            username: "dbi512957",
-            password: "admin",
-            database: "dbi512957"
+            host: process.env.DB_HOST,
+            username: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME
         });
 
         this.User = UserModel(this.sequelize, DataTypes);

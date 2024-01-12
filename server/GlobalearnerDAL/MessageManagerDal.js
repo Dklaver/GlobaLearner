@@ -5,10 +5,10 @@ module.exports = class MessageManagerDal{
     constructor(){
         this.sequelize = new Sequelize({
             dialect: "mysql",
-            host: "studmysql01.fhict.local",
-            username: "dbi512957",
-            password: "admin",
-            database: "dbi512957"
+            host: process.env.DB_HOST,
+            username: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME
         });
 
         this.Message = MessageModel(this.sequelize, DataTypes);
