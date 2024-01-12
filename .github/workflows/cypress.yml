@@ -14,13 +14,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          
-  
-      # Install dependencies and run Cypress tests
-      - name: Install dependencies and run Cypress
+
+      # Install dependencies
+      - name: Install dependencies
         run: |
+          cd client
           npm install
+
+      # Build the application
+      - name: Build application
+        run: |
+          cd client
           npm run build
-          npm start
+
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: |
+          cd client
           npx cypress run
-        working-directory: client
