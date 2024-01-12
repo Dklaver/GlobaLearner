@@ -13,9 +13,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
-      - run: cd client
-
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: 'client/package-lock.json'
+  
       # Install dependencies and run Cypress tests
       - name: Install dependencies and run Cypress
         run: |
@@ -23,3 +24,4 @@ jobs:
           npm run build
           npm start
           npx cypress run
+        working-directory: client
