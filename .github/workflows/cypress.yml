@@ -1,21 +1,15 @@
-name: Chrome
-on: push
+name: cypress tests
+
+on: [push]
+
 jobs:
-  chrome:
-    runs-on: ubuntu-22.04
-    name: E2E on Chrome
+  cypress-run:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      # Add a step to install dependencies and generate lockfile
-      - name: Install Dependencies
-        working-directory: client
-        run: |
-          npm install
-          # or yarn install if you're using Yarn
-
-      - name: Run Cypress Tests
-        
-        uses: cypress-io/github-action@v6
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run
+        uses: cypress-io/github-actions@v6
         with:
-          browser: chrome
+          build: npm run build
+          start: npm start
