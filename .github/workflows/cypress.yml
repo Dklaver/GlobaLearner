@@ -32,12 +32,9 @@ jobs:
         run: |
           cd client
           npm run start &
-
-      # Wait for the application to be ready
-      - name: Wait for application
-        run: |
-          cd client
+          echo "Waiting for the development server to start..."
           npx wait-on http://localhost:3000
+
           
       - name: Run Cypress tests
         run: |
