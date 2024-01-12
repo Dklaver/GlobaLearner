@@ -9,10 +9,13 @@ jobs:
 
       # Add a step to install dependencies and generate lockfile
       - name: Install Dependencies
+        working-directory: client
         run: |
           npm install
           # or yarn install if you're using Yarn
 
-      - uses: cypress-io/github-action@v6
+      - name: Run Cypress Tests
+        working-directory: client
+        uses: cypress-io/github-action@v6
         with:
           browser: chrome
