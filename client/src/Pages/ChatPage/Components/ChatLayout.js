@@ -25,7 +25,7 @@ export default function ChatLayout() {
     //this useEffect is for getting all previous messages
     getAllMessagesFromChat()
     
-  },[])
+  },[getAllMessagesFromChat])
 
   const getAllMessagesFromChat = async () => {
     try {

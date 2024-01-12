@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../style.css';
 import axios from '../../../axios';
 import { NavLink } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import ChatLayout from './ChatLayout';
+
 
 export default function Chat() {
 
