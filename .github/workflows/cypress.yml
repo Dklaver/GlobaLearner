@@ -28,9 +28,12 @@ jobs:
           npm run build
 
       # Run Cypress tests
-      - name: Run Cypress tests
+      - name: Run npm run start
         run: |
           cd client
           npm run start
-          sleep 5
+          
+      - name: Run Cypress tests
+        run: |
+          cd client
           npx cypress run --browser chrome
