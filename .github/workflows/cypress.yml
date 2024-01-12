@@ -6,7 +6,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     env:
-      DB_HOST: 192.168.15.54
+      DB_HOST: ${{ secrets.DB_HOST }}
 
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
