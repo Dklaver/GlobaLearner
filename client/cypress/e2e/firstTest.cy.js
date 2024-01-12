@@ -34,7 +34,7 @@ describe('end to end', () => {
     cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat').click();
 
     // go to chat
-    
+    cy.visit('http://localhost:3000/chats')
 
     cy.get('[data-testid="cypress-createChatButton"]').should("exist").should('have.text', 'Create chat').click();
 
