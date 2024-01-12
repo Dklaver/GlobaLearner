@@ -43,7 +43,7 @@ jobs:
       - name: Build server
         run: |
           cd server
-          npm run build
+          npm run build --if-present
 
       # Start server
       - name: Start server
