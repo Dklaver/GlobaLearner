@@ -47,7 +47,7 @@ describe('end to end', () => {
     cy.get('[data-testid="cypress-messageInput"]').should("exist").type("this is a cypress test {enter}");
 
     
-    cy.reload();
+    cy.reload({ timeout: 10000 });
 
     cy.get('[data-testid="cypress-messageToChat"]').should("exist").click();
 
@@ -58,10 +58,3 @@ describe('end to end', () => {
   })
 })
 
-// describe('login', () => {
-//   it('passes', () => {
-//     cy.visit('http://localhost:3000/login')
-
-
-//   })
-// })
