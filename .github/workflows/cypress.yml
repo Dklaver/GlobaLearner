@@ -6,9 +6,10 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     env:
-      DB_HOST: studmysql01.fhict.local
-      DB_USER: dbi512957
-      DB_PASSWORD: admin
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14
 
       # Install dependencies for client
       - name: Install dependencies for client
@@ -31,31 +32,19 @@ jobs:
           cd client
           npm run build
 
+      # Start server in the background
+      - name: Start server
+        run: |
+          cd server
+          npm install
+          npm run dev &
+          npx wait-on http://127.0.0.1:5000
+
       # Start client
       - name: Start client
         run: |
           cd client
           npm start & npx wait-on http://127.0.0.1:3000
-
-      # Install dependencies for server
-      - name: Install dependencies for server
-        run: |
-          cd server
-          npm install
-      - name: Configure environment variables
-        run: echo "DB_USERNAME=dbi512957\nDB_PASSWORD=admin\nDB_DATABASE=dbi512957\nDB_HOST=studmysql01.fhict.local" >> .env
-
-      # Build server
-      - name: Build server
-        run: |
-          cd server
-          npm run build --if-present
-
-      # Start server
-      - name: Start server
-        run: |
-          cd server
-          DB_HOST=$DB_HOST DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD npm run dev & npx wait-on http://127.0.0.1:5000
 
       # Run Cypress tests
       - name: Run Cypress tests
