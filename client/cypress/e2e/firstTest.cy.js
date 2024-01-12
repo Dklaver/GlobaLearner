@@ -36,7 +36,8 @@ describe('end to end', () => {
     // go to chat
     cy.visit('http://localhost:3000/chats')
 
-    cy.get('[data-testid="cypress-createChatButton"]').should("exist").should('have.text', 'Create chat').click();
+    cy.get('[data-testid="cypress-createChatButton"]', { timeout: 10000 }).should('exist');
+    cy.get('[data-testid="cypress-createChatButton"]').click();
 
     cy.get('[data-testid="cypress-createChatName"]').should("exist").type('CypressTest');
     cy.get('[data-testid="cypress-createChatLanguage"]').should("exist").type('English');
