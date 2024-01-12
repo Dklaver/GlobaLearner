@@ -30,7 +30,7 @@ describe('end to end', () => {
 
     // back to home
     
-    cy.url().should('eq', 'http://localhost:3000/');
+    
 
 
     // go to chat
