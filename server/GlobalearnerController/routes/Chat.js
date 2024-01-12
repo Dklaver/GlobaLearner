@@ -54,6 +54,18 @@ class ChatController{
             }
             
         })
+
+        this.router.get("/getUsersChat", GetUserId, async(req, res) => {
+            try{
+                const userId = req.userId;
+
+                const result = await this.chatManager.getAllChatsFromUser(userId)
+
+                res.status(200).json(result)
+            }catch{
+
+            }
+        })
     
     }
     

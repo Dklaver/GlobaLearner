@@ -15,5 +15,9 @@ module.exports = class ChatManager {
    async insertUserInChat(chatId, userId){
     return this.ChatManagerDal.insertUserInChat(chatId, userId)
    }
+
+   async getAllChatsFromUser(userId){
+     return this.ChatManagerDal.getAllChatsFromUser(userId)
+   }
     
 }

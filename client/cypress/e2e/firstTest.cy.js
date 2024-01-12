@@ -47,6 +47,13 @@ describe('end to end', () => {
     cy.get('[data-testid="cypress-messageInput"]').should("exist").type("this is a cypress test {enter}");
 
     
+    cy.reload();
+
+    cy.get('[data-testid="cypress-messageToChat"]').should("exist").click();
+
+    //back to chat list page
+
+    cy.get('[data-testid="cypress-showUsersChats"]').should("exist").click();
     
   })
 })

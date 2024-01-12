@@ -231,7 +231,7 @@ const handleReceivedMessage = (data, socket) => {
       <body>
         <h1 className="title">Chat {chatId}</h1>
         <div>
-          <NavLink onClick={leaveChat} className='button-back' to="/chats" >&lt;</NavLink>
+          <NavLink data-testid="cypress-messageToChat" onClick={leaveChat} className='button-back' to="/chats" >&lt;</NavLink>
         </div>
         <section className="left-section">
           <h1 className="joined-users">

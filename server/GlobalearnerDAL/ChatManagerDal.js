@@ -87,4 +87,33 @@ module.exports = class ChatDal {
           console.log(err);
         }
       }
+
+      async getAllChatsFromUser(userId) {
+        try{
+          const result = await this.UserChat.findAll({
+            where: {
+              userId: userId,
+            },
+            attributes: ['chatId']
+          })
+          console.log("All chat id's from user: " + JSON.stringify(result))
+
+          const chatIds = result.map(item => item.chatId);
+
+          const usersChats = await this.Chat.findAll({
+            where: {
+              id: chatIds
+            },
+            attributes: ['id','name','language']
+          })
+
+          const allChatNames = usersChats.map((chatInstance) => chatInstance.toJSON());
+
+          console.log("all chats from user: " + JSON.stringify(allChatNames))
+
+          return allChatNames
+        }catch (err){
+          console.log(err)
+        }
+      }
 }

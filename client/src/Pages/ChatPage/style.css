@@ -1,74 +1,81 @@
-
 .container {
-    position: relative;
-    
-  }
-  
-  .centered-container {
-    text-align: center;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 1100px;
-  }
+  position: relative;
+}
 
-  .centered-container::-webkit-scrollbar {
-    width: 12px; /* Set the width of the scrollbar */
+.centered-container {
+  text-align: center;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 1100px;
+}
+
+.centered-container::-webkit-scrollbar {
+  width: 12px;
 }
 
 .centered-container::-webkit-scrollbar-thumb {
-    background-color: #ccf5cb; /* Set the color of the thumb */
-    border-radius: 6px; /* Round the corners of the thumb */
-    
+  background-color: #ccf5cb;
+  border-radius: 6px;
 }
 
 .centered-container::-webkit-scrollbar-track {
-    background-color: transparent; /* Set the color of the track */
-    border-radius: 6px;
+  background-color: transparent;
+  border-radius: 6px;
 }
-  
-  .chats-header {
-    font-size: 1.5em;
-    margin-bottom: 20px;
+
+.chats-header {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.chat-section {
+  border: 1px solid #7fc37e;
+  background-color: #fefee2;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+
+.chat-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.chat-name,
+.chat-language {
+  font-weight: bold;
+}
+
+.button-Create {
+  position: absolute;
+  top: 14%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+.button-Create:hover {
+  background-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px) {
+  .centered-container {
+      height: auto;
   }
-  
-  .chat-section {
-    border: 1px solid #7fc37e;
-    background-color: #fefee2;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 40px;
-  }
-  
-  .chat-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 40px;
-  }
-  
-  .chat-name {
-    font-weight: bold;
-  }
-  
-  .chat-language {
-    font-weight: bold;
-  }
-  
+
   .button-Create {
-    position: absolute;
-    top: 14%;
-    left: 35%;
-    transform: translate(-50%, -50%);
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    text-decoration: none;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, 0);
   }
-  
-  .button-Create:hover {
-    background-color: #45a049;
-  }
+}
