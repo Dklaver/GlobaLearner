@@ -43,7 +43,7 @@ describe('after login', () => {
     // go to chat
     cy.visit('http://localhost:3000/chats')
 
-    cy.get('[data-testid="cypress-createChatButton"]', { timeout: 10000 }).should('exist');
+    cy.get('[data-testid="cypress-createChatButton"]', { delay: 3000 }).should('exist');
     cy.get('[data-testid="cypress-createChatButton"]').click();
 
     cy.get('[data-testid="cypress-createChatName"]').should("exist").type('CypressTest');
