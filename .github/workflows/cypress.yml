@@ -28,10 +28,16 @@ jobs:
           npm run build
 
       # Run Cypress tests
-      - name: Run npm run start
+      - name: Start application
         run: |
           cd client
-          npm run start
+          npm run start &
+
+      # Wait for the application to be ready
+      - name: Wait for application
+        run: |
+          cd client
+          npx wait-on http://localhost:3000
           
       - name: Run Cypress tests
         run: |
