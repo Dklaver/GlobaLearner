@@ -16,24 +16,27 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       # Install dependencies
-      - name: Install dependencies
+      - name: Install dependencies for client
         run: |
           cd client
           npm install
-          cd server
-          npm install
 
       # Build the application
-      - name: Build application
+      - name: Build client
         run: |
           cd client
           npm run build
 
       # Run Cypress tests
-      - name: Start application
+      - name: Start client
         run: |
           cd client
           npm start & npx wait-on http://127.0.0.1:3000
+
+      - name: Install dependencies for server
+        run: |
+          cd server
+          npm install
       
       - name: Build server
         run: |
