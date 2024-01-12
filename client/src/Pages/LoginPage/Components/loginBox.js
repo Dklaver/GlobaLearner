@@ -46,9 +46,9 @@ export default function Login() {
             setError(message)
         }
         else{
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+            
+            navigate('/');
+            
         }
         }catch (err) {
             if (!err.response) {
