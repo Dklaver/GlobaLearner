@@ -15,7 +15,7 @@ jobs:
           # or yarn install if you're using Yarn
 
       - name: Run Cypress Tests
-        working-directory: client
+        
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
