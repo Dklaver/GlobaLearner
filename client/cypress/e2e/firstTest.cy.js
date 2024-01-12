@@ -41,9 +41,12 @@ describe('after login', () => {
     cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat').click();
 
     // go to chat
-    cy.visit('http://localhost:3000/chats')
+    cy.window().then((win) => {
+      const jwtToken = win.localStorage.getItem('jwt');
 
-    cy.get('[data-testid="cypress-createChatButton"]', { timeout: 15000, retryInterval: 1000 }).should('exist');
+      expect(jwtToken).to.not.be.null;
+    }),
+    cy.get('[data-testid="cypress-createChatButton"]').should('exist');
     cy.get('[data-testid="cypress-createChatButton"]').click();
 
     cy.get('[data-testid="cypress-createChatName"]').should("exist").type('CypressTest');
