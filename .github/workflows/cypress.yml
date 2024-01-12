@@ -31,4 +31,4 @@ jobs:
       - name: Run Cypress tests
         run: |
           cd client
-          npx cypress run
+          npx cypress run --browser chrome
