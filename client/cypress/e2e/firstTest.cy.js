@@ -22,7 +22,14 @@ describe('end to end', () => {
 
     // go to login
 
-    cy.get('[data-testid="cypress-registerToLogin"]').click();
+    
+    
+  })
+})
+
+describe('after login', () => {
+  it ('passes', () => {
+    cy.visit('http://localhost:3000/login')
 
     cy.get('[data-testid="cypress-LoginUsername"]').should("exist").type('cypress');
     cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
@@ -55,7 +62,5 @@ describe('end to end', () => {
     //back to chat list page
 
     cy.get('[data-testid="cypress-showUsersChats"]').should("exist").click();
-    
   })
 })
-
