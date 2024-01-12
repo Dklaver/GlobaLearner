@@ -54,6 +54,16 @@ jobs:
           dockerfile: client/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Run cypress end to end tests
+      uses: cypress-io/github-action@v6
+      with:
+        working-directory: client
+        build: npm run build
+        start: npm start
+        browser: chrome
+        
+
       
 
   
