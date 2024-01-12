@@ -31,8 +31,8 @@ jobs:
       - name: Start application
         run: |
           cd client
-          npm run start &
-          echo "Waiting for the development server to start..."
+          npm run start 
+          
           npx wait-on http://localhost:3000
 
           
