@@ -23,52 +23,29 @@ describe('End-to-End Registration', () => {
 
     cy.get('[data-testid="cypress-RegisterSignup"]').should('not.be.disabled');
   });
-});
+    it('should perform actions after login', () => {
+      cy.visit('http://localhost:3000/login');
+      cy.get('[data-testid="cypress-LoginUsername"]').should('exist').type('cypress');
+      cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
+      cy.get('[data-testid="cypress-loginSignin"]').should('exist').click();
+      cy.wait(2000)
 
-describe('After Login', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/login');
-  });
+      cy.url().should('include', '/chats')
+     
+      cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
+      cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
+      cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').type('English');
 
-  it('should perform actions after login', () => {
-    cy.get('[data-testid="cypress-LoginUsername"]').should('exist').type('cypress');
-    cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
-    cy.get('[data-testid="cypress-loginSignin"]').should('exist').click();
+      cy.get('[data-testid="cypress-createChat"]').should('exist').click();
 
-    // back to home
-    cy.wait(2000);
-    
-    cy.get('[data-testid="cypress-navchat"]').should('exist').and('have.text', 'Chat').click();
-
-    // go to chat
-    cy.wait(2000);
-
-    cy.window().then((win) => {
-      const jwtToken = win.localStorage.getItem('jwt');
-      expect(jwtToken).to.not.be.null;
-      cy.log('token: ', jwtToken);
+      cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test {enter}");
+  
+      cy.reload();
+  
+      cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
+  
+      // back to chat list page
+      cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
     });
-    
-    cy.wait(3000);
-
-    cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
-    cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
-    cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').type('English');
-
-    cy.wait(2000);
-
-    cy.get('[data-testid="cypress-createChat"]').should('exist').click();
-
-    // go in chat/$id
-    cy.wait(5000);
-
-    cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test {enter}");
-
-    cy.reload();
-
-    cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
-
-    // back to chat list page
-    cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
-  });
+  
 });

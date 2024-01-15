@@ -47,11 +47,7 @@ export default function Login() {
         }
         else{
             
-            setTimeout(() => {
-                // Your navigation logic here
-                navigate('/');
-              }, 1000);
-            
+        navigate('/chats');
             
         }
         }catch (err) {
