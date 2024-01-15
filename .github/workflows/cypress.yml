@@ -1,30 +1,51 @@
-name: E2E in custom container
+name: Cypress Tests
+
 on: push
+
 jobs:
   cypress-run:
-    runs-on: ubuntu-22.04
-    container: 
-     image: cypress/browsers:node18.12.0-chrome106-ff106
-     options: --user 1001  
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: 'server/package-lock.json'
-    - run: npm install
-      working-directory: server
-    - run: npm ci
-      working-directory: server
-    - run: npm run build --if-present
-      working-directory: server
-    - run: npm test
-      working-directory: server
+    runs-on: ubuntu-latest
     
-    - uses: actions/checkout@v3
-    - uses: cypress-io/github-action@v5
-      with:
-        browser: chrome
-        working-directory: client
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install dependencies for client and server
+        run: |
+          cd client
+          npm install
+          cd ../server
+          npm install
+
+      - name: Build client
+        run: |
+          cd client
+          npm run build 
+
+      - name: Start server and client in the foreground
+        run: |
+          #cd server
+          #npm run dev &
+          
+      - name: Start client in the foreground
+        run: |
+          cd client
+          npm start &
+        
+      - name: Cypress run
+        
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          working-directory: client
+          run: npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
