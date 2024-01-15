@@ -20,24 +20,30 @@ jobs:
         with:
           node-version: 14
 
-      - name: Install dependencies for client
+      - name: Install dependencies for client and server
         run: |
           cd client
+          npm install
+          cd ../server
           npm install
 
       - name: Build client
         run: |
           cd client
-          npm run build
+          npm run build 
 
-      - name: Start server and client in the background
+      - name: Start server and client in the foreground
+        run: |
+          cd server
+          npm run dev &
+          
+      - name: Start client in the foreground
         run: |
           cd client
           npm start &
-          npx wait-on http://127.0.0.1:3000
           
-
       - name: Run Cypress tests
         run: |
           cd client
           npx cypress run --browser chrome
+          npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
