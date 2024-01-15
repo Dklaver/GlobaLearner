@@ -35,7 +35,7 @@ jobs:
       - name: Start server and client in the foreground
         run: |
           cd server
-          npm run dev
+          npm start
           
       - name: Wait for server to be ready
         run: |
