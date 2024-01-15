@@ -1,0 +1,24 @@
+name: E2E
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install server dependencies
+        run: npm ci
+        working-directory: server
+      - name: Install client dependencies
+        run: npm ci
+        working-directory: client
+
+      - name: Start server in the background
+        run: npm start &
+        working-directory: server
+
+      # Cypress has its own package.json in folder "e2e"
+      - name: Install Cypress and run tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          working-directory: client
