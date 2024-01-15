@@ -60,6 +60,8 @@ describe('after login', () => {
     cy.get('[data-testid="cypress-createChatName"]').should("exist").type('CypressTest');
     cy.get('[data-testid="cypress-createChatLanguage"]').should("exist").type('English');
 
+    cy.wait(2000);
+
     cy.get('[data-testid="cypress-createChat"]').should("exist").click();
 
     //go in chat/$id
