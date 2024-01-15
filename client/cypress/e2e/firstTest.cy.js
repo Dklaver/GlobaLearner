@@ -52,7 +52,7 @@ describe('after login', () => {
       cy.log('token: ', jwtToken)
     }),
     
-    cy.wait(2000);
+    cy.wait(3000);
 
     cy.get('[data-testid="cypress-createChatButton"]').should('exist');
     cy.get('[data-testid="cypress-createChatButton"]').click();
