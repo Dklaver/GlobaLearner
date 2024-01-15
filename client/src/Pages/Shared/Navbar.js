@@ -43,10 +43,10 @@ export default function Navbar() {
             
             <ul>
                 <li>
-                    <NavLink data-testid="cypress-navchat" to='/chats' className="nav-link">Chat</NavLink>
+                    <NavLink data-testid="cypress-navchat" to='/chats' >Chat</NavLink>
                 </li>
                 <li>
-                    <NavLink data-testid="cypress-navregister" to='/register' className="nav-link">Register</NavLink>
+                    <NavLink data-testid="cypress-navregister" to='/register' >Register</NavLink>
                 </li>
             </ul>
         </nav>

@@ -1,12 +1,12 @@
-import { faker } from '@faker-js/faker';
+
 
 describe('end to end', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/')
 
     cy.get('[data-testid="cypress-navtitle"]').should("exist").should('have.text', 'Globalearner');
-    cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat');
-    cy.get('[data-testid="cypress-navregister"]').should("exist").should('have.text', 'register').click();
+    cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'Chat');
+    cy.get('[data-testid="cypress-navregister"]').should("exist").should('have.text', 'Register').click();
 
     // go to register
     cy.get('[data-testid="cypress-RegisterSignup"]').should('exist').should('be.disabled');
@@ -40,7 +40,7 @@ describe('after login', () => {
     // back to home
     cy.wait(3000);
     
-    cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'chat').click();
+    cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'Chat').click();
 
     cy.wait(3000);
     // go to chat
