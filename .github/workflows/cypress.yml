@@ -5,6 +5,7 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    
     env:
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_NAME: ${{ secrets.DB_NAME }}
@@ -14,7 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -41,9 +41,9 @@ jobs:
         run: |
           cd client
           npm start &
-          
-      - name: Run Cypress tests
+        
+      - name: Cypress run
         run: |
-          cd client
           npx cypress run --browser chrome
           npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
+        working-directory: client
