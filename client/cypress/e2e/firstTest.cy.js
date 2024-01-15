@@ -38,11 +38,11 @@ describe('after login', () => {
     cy.get('[data-testid="cypress-loginSignin"]').should("exist").click();
 
     // back to home
-    cy.wait(3000);
+    cy.wait(2000);
     
     cy.get('[data-testid="cypress-navchat"]').should("exist").should('have.text', 'Chat').click();
 
-    cy.wait(3000);
+    cy.wait(2000);
     // go to chat
     cy.window().then((win) => {
       const jwtToken = win.localStorage.getItem('jwt');
@@ -52,7 +52,7 @@ describe('after login', () => {
       cy.log('token: ', jwtToken)
     }),
     
-    cy.wait(3000);
+    cy.wait(2000);
 
     cy.get('[data-testid="cypress-createChatButton"]').should('exist');
     cy.get('[data-testid="cypress-createChatButton"]').click();
@@ -63,6 +63,8 @@ describe('after login', () => {
     cy.get('[data-testid="cypress-createChat"]').should("exist").click();
 
     //go in chat/$id
+    cy.wait(2000);
+
     cy.get('[data-testid="cypress-messageInput"]').should("exist").type("this is a cypress test {enter}");
 
     
