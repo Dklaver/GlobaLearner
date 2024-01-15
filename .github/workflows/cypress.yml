@@ -35,20 +35,15 @@ jobs:
       - name: Start server and client in the foreground
         run: |
           cd server
-          npm start
-          
-      - name: Wait for server to be ready
-        run: |
+          npm start &
           npx wait-on http://127.0.0.1:5000
-
+      
       - name: Start client in the foreground
         run: |
           cd ../client
-          npm start
-
-      - name: Wait for client to be ready
-        run: |
+          npm start &
           npx wait-on http://127.0.0.1:3000
+          
 
       - name: Run Cypress tests
         run: |
