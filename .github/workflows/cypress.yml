@@ -20,9 +20,11 @@ jobs:
         with:
           node-version: 14
 
-      - name: Install dependencies for client
+      - name: Install dependencies for client and server
         run: |
           cd client
+          npm install
+          cd ../server
           npm install
 
       - name: Build client
@@ -30,13 +32,13 @@ jobs:
           cd client
           npm run build
 
-      - name: client 
+      - name: start client 
         run: |
           cd client
           npm start &
           npx wait-on http://127.0.0.1:3000
 
-      - name: Start server and client in the background
+      - name: Start server
         run: |
           cd server
           npm run dev &
