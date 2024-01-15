@@ -11,7 +11,9 @@ module.exports = class ChatDal {
         host: process.env.DB_HOST,
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        
+        
     });
 
         this.Chat = Chatmodel(this.sequelize, DataTypes);
@@ -24,7 +26,7 @@ module.exports = class ChatDal {
                 attributes: ['id','name','language']     
         })
 
-        const allChatNames = result.map((chatInstance) => chatInstance.toJSON());
+        const allChatNames = result.map((chatInstance) => chatInstance.toJSON()); 
 
         return allChatNames;
         }catch (err){

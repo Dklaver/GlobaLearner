@@ -8,7 +8,7 @@ import axios from "../../axios";
 export default function Navbar() {
     
 
-    const [userName, SetUserName] = useState("") 
+    
     
 
     useEffect(() => {
@@ -27,7 +27,6 @@ export default function Navbar() {
     
                     const responseData = response.data;
                     console.log("user logged in: " + JSON.stringify(responseData))
-                    SetUserName(responseData.user.name)
                     
                 } 
             }catch (err){
@@ -40,16 +39,16 @@ export default function Navbar() {
     
     return (
         <nav className="nav">
-            <NavLink data-testid="cypress-navtitle" to='/' className={"site-title"}>Globalearner</NavLink>
-            <h3>welcome! {userName}</h3>
+            <NavLink data-testid="cypress-navtitle" to='/' className="site-title">Globalearner</NavLink>
+            
             <ul>
                 <li>
-                    <NavLink data-testid="cypress-navchat" to='/chats'>chat</NavLink>
+                    <NavLink data-testid="cypress-navchat" to='/chats' className="nav-link">Chat</NavLink>
                 </li>
                 <li>
-                    <NavLink data-testid="cypress-navregister" to='/register'>register</NavLink>
+                    <NavLink data-testid="cypress-navregister" to='/register' className="nav-link">Register</NavLink>
                 </li>
             </ul>
         </nav>
-    )
+    );
 }

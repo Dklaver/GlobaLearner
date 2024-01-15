@@ -226,47 +226,52 @@ const handleReceivedMessage = (data, socket) => {
 
 
   return (
-    <div className="full-container">
-      <head>
+    <div className="container-fluid">
+      
+      <div>
+              <NavLink data-testid="cypress-messageToChat" onClick={leaveChat} className='button-back' to="/chats">&lt;</NavLink>
+            </div>
+      <body>
+        <div className="row">
+          {/* Left Half */}
+          <div className="col-md-12 col-lg-6 p-3 left-div">
+          <head>
         <title>Chat</title>
       </head>
-      <body>
-        <h1 className="title">Chat {chatId}</h1>
-        <div>
-          <NavLink data-testid="cypress-messageToChat" onClick={leaveChat} className='button-back' to="/chats" >&lt;</NavLink>
-        </div>
-        <section className="left-section">
-          <h1 className="joined-users">
-            joined: {userOne}, {userTwo}
-          </h1>
-          <h3 className="clients-total" id="clients-total">total joined: {totalJoined}</h3>
-        </section>
-        <div className="main">
-          <div className="name">
-            <span><i className="far fa-user"></i></span>
+            <h1 className="title">Chat {chatId}</h1>
+            
+            <h1 className="joined-users">
+              joined: {userOne}, {userTwo}
+            </h1>
+            <h3 className="clients-total" id="clients-total">total joined: {totalJoined}</h3>
           </div>
   
-          <ul className="message-container" id="message-container" ref={messageContainerRef}>
-            {messagesLeft.concat(messagesRight).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((message, index) => (
-              <li key={index} className={message.isCurrentUser ? "message-left" : "message-right"}>
-                <p className="message">{message.text}</p>
-                {/* Add your user and timestamp details here */}
-              </li>
-            ))}
-            
-            <li className="message-feedback">
-              <p className="feedback" id='feedback'> daniel is typing a message...</p>
-            </li>
-          </ul>
+          {/* Right Half */}
+          <div className="col-md-12 col-lg-6 p-3 right-div">
+            <div className="name">
+              <span><i className="far fa-user"></i></span>
+            </div>
   
-          <form className="message-form" id="message-form">
-            <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autocomplete="off" />
-            <div className="v-divider"></div>
-            <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
-          </form>
+            <ul className="message-container" id="message-container" ref={messageContainerRef}>
+              {messagesLeft.concat(messagesRight).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((message, index) => (
+                <li key={index} className={message.isCurrentUser ? "message-left" : "message-right"}>
+                  <p className="message">{message.text}</p>
+                  {/* Add your user and timestamp details here */}
+                </li>
+              ))}
   
+              
+            </ul>
+  
+            <form className="message-form" id="message-form">
+              <div className="col-md-12 col-lg-6 p-3 textbox-right">
+              <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autoComplete="off" />
+              <div className="v-divider"></div>
+              <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
+              </div>
+            </form>
+          </div>
         </div>
-  
       </body>
     </div>
-  )}
+  );}

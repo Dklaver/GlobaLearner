@@ -60,43 +60,12 @@ export default function Chat() {
   return (
     <>
       {!allowed ? (
-        <section>
+        <section className="container mt-5">
           <p>Please log in first</p>
-          <NavLink to='/register'>Don't have an account yet?</NavLink>
+          <NavLink to='/register' className="link-register">Don't have an account yet?</NavLink>
         </section>
       ) : (
         <>
-        {!switchActive ? (
-          <section className='centered-container'>
-          <h2 className='centered-header'>Chats</h2>
-          
-          {chats
-            .sort((a, b) => b.id - a.id) // Sort in descending order based on chat.id
-            .map((chat) => (
-              <section className="chat-section" key={chat.id}>
-                <div className="chat-name">{chat.name}</div>
-                <div className='chat-language'>Language: {chat.language}</div>
-                <NavLink to={`/chat/${chat.id}`} className='button-ViewChat'>Join</NavLink>
-              </section>
-            ))}
-        </section>
-        ) : (
-          <section className='centered-container'>
-            <h2 className='centered-header'>your chats</h2>
-            {UserChats
-              .sort((a, b) => b.id - a.id) // Sort in descending order based on chat.id
-              .map((chat) => (
-                <section className="chat-section" key={chat.id}>
-                  <div className="chat-name">{chat.name}</div>
-                  <div className='chat-language'>Language: {chat.language}</div>
-                  <NavLink to={`/chat/${chat.id}`} className='button-ViewChat'>Join</NavLink>
-                </section>
-              ))}
-          </section>
-        )}
-          <div>
-            <NavLink data-testid="cypress-createChatButton" className='button-Create' to="/chats/create">Create chat</NavLink>
-          </div>
           <div className='checkbox'>
             <p>show your chats</p>
             <label data-testid="cypress-showUsersChats" className="switch">
@@ -104,9 +73,49 @@ export default function Chat() {
               <span class="slider round"></span>
             </label>
           </div>
+          
+          {!switchActive ? (
+            <section className='container mt-5'>
+              
+              <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
+              Create chat
+            </NavLink>
+              
+              <h2 className='chats-header mb-4'>Chats</h2>
+              
+              {chats
+                .sort((a, b) => b.id - a.id)
+                .map((chat) => (
+                  <div className="chat-section card mb-3" key={chat.id}>
+                    <div className="card-body">
+                      <h5 className="chat-name card-title">{chat.name}</h5>
+                      <p className="chat-language card-text">Language: {chat.language}</p>
+                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join</NavLink>
+                    </div>
+                  </div>
+                ))}
+            </section>
+          ) : (
+            <section className='container mt-5'>
+               <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
+              Create chat
+            </NavLink>
+              <h2 className='chats-header mb-4'>Your Chats</h2>
+              {UserChats
+                .sort((a, b) => b.id - a.id)
+                .map((chat) => (
+                  <div className="chat-section card mb-3" key={chat.id}>
+                    <div className="card-body">
+                      <h5 className="chat-name card-title">{chat.name}</h5>
+                      <p className="chat-language card-text">Language: {chat.language}</p>
+                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join</NavLink>
+                    </div>
+                  </div>
+                ))}
+            </section>
+          )}
         </>
       )}
-
     </>
   );
 };

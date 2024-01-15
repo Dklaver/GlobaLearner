@@ -51,7 +51,7 @@ app.use('/message', messageController.router);
 
 module.exports = app;
 
-db.sequelize.sync().then((req) => {
+db.sequelize.sync( ).then((req) => {
     app.use(express.json());
     const server = app.listen(5000, () => {
         console.log(`Server is listening to 5000`);
