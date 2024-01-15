@@ -22,9 +22,8 @@ describe('End-to-End Registration', () => {
     cy.get('[data-testid="cypress-registerMatch"]').type('{backspace}1');
 
     cy.get('[data-testid="cypress-RegisterSignup"]').should('not.be.disabled');
-  });
-    it('should perform actions after login', () => {
-      cy.visit('http://localhost:3000/login');
+
+    cy.visit('http://localhost:3000/login');
       cy.get('[data-testid="cypress-LoginUsername"]').should('exist').type('cypress');
       cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
       cy.get('[data-testid="cypress-loginSignin"]').should('exist').click();
@@ -46,6 +45,5 @@ describe('End-to-End Registration', () => {
   
       // back to chat list page
       cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
-    });
-  
+  });
 });
