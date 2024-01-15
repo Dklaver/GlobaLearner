@@ -37,7 +37,9 @@ describe('End-to-End Registration', () => {
 
       cy.get('[data-testid="cypress-createChat"]').should('exist').click();
 
-      cy.get('[data-testid="cypress-messageInput"]', { timeout: 10000 } ).should('exist').type("this is a cypress test {enter}");
+      cy.url().should('include', '/chat')
+
+      cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test {enter}");
   
       cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
   
