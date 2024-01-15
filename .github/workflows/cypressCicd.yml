@@ -1,13 +1,24 @@
 name: E2E
-on: push
+
+on:
+  push
+
 jobs:
   test:
     runs-on: ubuntu-22.04
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Install server dependencies
         run: npm ci
         working-directory: server
+
       - name: Install client dependencies
         run: npm ci
         working-directory: client
