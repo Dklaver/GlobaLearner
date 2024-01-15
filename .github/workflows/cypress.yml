@@ -43,9 +43,6 @@ jobs:
           npm start &
         
       - name: Cypress run
-        
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          working-directory: client
-          run: npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
+        run: |
+          npx cypress run
+          npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
