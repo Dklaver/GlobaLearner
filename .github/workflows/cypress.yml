@@ -36,7 +36,7 @@ jobs:
         run: |
           cd server
           npm run dev &
-          npx wait-on http://127.0.0.1:5000
+          npx wait-on http://[::1]:5000
           echo "Server is ready. Proceeding to start client."
           
           
