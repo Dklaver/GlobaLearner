@@ -15,42 +15,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Navigate to the client directory
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 14
 
-      # Install dependencies for client
       - name: Install dependencies for client
         run: |
           cd client
           npm install
 
-      # Build client
       - name: Build client
         run: |
           cd client
           npm run build
 
-      # Start server
-      - name: Start server
+      - name: Start server and client
         run: |
           cd server
           npm install
           npm run dev &
-          npx wait-on http://127.0.0.1:5000
 
-      # Start client
-      - name: Start client
-        run: |
-          cd client
+          cd ../client
           npm start &
-          npx wait-on http://127.0.0.1:3000
+          
+          # Wait for both server and client to be ready
+          npx wait-on http://127.0.0.1:5000 http://127.0.0.1:3000
 
-      # Wait for both server and client to be ready
-
-      # Run Cypress tests
       - name: Run Cypress tests
         run: |
           cd client
