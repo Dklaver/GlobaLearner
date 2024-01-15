@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: 14
 
-      #- name: Install dependencies for client and server
-        #run: |
+      - name: Install dependencies for client and server
+        run: |
           #cd client
           #npm install
           #cd ../server
