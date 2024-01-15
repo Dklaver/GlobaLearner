@@ -44,6 +44,6 @@ jobs:
         
       - name: Cypress run
         run: |
-          npx cypress run
+          npx cypress run --browser chrome
           npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
         working-directory: client
