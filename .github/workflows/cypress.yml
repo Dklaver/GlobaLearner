@@ -7,7 +7,23 @@ jobs:
      image: cypress/browsers:node18.12.0-chrome106-ff106
      options: --user 1001  
     steps:
-      - uses: actions/checkout@v3
-      - uses: cypress-io/github-action@v5
-        with:
-          browser: firefox
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'server/package-lock.json'
+    - run: npm install
+      working-directory: server
+    - run: npm ci
+      working-directory: server
+    - run: npm run build --if-present
+      working-directory: server
+    - run: npm test
+      working-directory: server
+    
+    - uses: actions/checkout@v3
+    - uses: cypress-io/github-action@v5
+      with:
+        browser: chrome
