@@ -34,8 +34,8 @@ jobs:
 
       - name: Start server and client in the foreground
         run: |
-          #cd server
-          #npm run dev &
+          cd server
+          npm run dev &
           
       - name: Start client in the foreground
         run: |
