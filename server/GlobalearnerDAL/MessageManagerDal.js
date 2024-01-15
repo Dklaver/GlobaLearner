@@ -9,6 +9,7 @@ module.exports = class MessageManagerDal{
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
+            port:40000
             
         });
 
