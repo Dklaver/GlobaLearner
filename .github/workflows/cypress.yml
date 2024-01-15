@@ -30,17 +30,17 @@ jobs:
       - name: Build client
         run: |
           cd client
-          npm run build
+          npm run build 
 
       - name: Start server and client in the foreground
         run: |
           cd server
-          npm run dev
+          npm run dev &
           
       - name: Start client in the foreground
         run: |
           cd client
-          npm start 
+          npm start &
           
       - name: Run Cypress tests
         run: |
