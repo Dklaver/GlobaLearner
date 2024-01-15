@@ -41,11 +41,11 @@ describe('End-to-End Registration', () => {
 
       // cy.wait(5000)
 
-      cy.get('[data-testid="cypress-messageInput"]').should('exist').should('be.visible');
+      // cy.get('[data-testid="cypress-messageInput"]').should('exist').should('be.visible');
       // cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test {enter}");
-      // cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
+      cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
   
-      // // back to chat list page
-      // cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
+      // back to chat list page
+      cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
   });
 });
