@@ -20,31 +20,35 @@ jobs:
         with:
           node-version: 14
 
-      - name: Install dependencies for client and server
-        run: |
-          cd client
-          npm install
-          cd ../server
-          npm install
+      #- name: Install dependencies for client and server
+        #run: |
+          #cd client
+          #npm install
+          #cd ../server
+          #npm install
 
-      - name: Build client
-        run: |
-          cd client
-          npm run build 
+      #- name: Build client
+        #run: |
+          #cd client
+          #npm run build 
 
-      - name: Start server and client in the foreground
-        run: |
-          cd server
-          npm run dev &
+      #- name: Start server and client in the foreground
+        #run: |
+          #cd server
+          #npm run dev &
           
-      - name: Start client in the foreground
-        run: |
-          cd client
-          npm start &
-      - name: wait for server & client
-        run: npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
+      #- name: Start client in the foreground
+        #run: |
+          #cd client
+          #npm start &
+
+      #- name: wait for server & client
+        #run: npx wait-on 'http://127.0.0.1:3000, http://127.0.0.1:5000'
       
         
       - name: Cypress run
+        
         uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
           
