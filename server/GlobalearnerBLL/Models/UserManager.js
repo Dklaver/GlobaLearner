@@ -60,12 +60,22 @@ module.exports = class UserManager extends iUserManager{
         }
     }
 
-    async getUsersByChatId(chatId){
-        try{
-            const users = await this.UserManagerDal.getUsersByChatId(chatId);
+    async getUsersByChatId(chatId, userId) {
+        try {
+          const users = await this.UserManagerDal.getUsersByChatId(chatId);
+          console.log("users: " + JSON.stringify(users));
+      
+          if (users.length >= 2 ) {
+            if (users.some(user => user.id === userId)){
+                return users;
+            }else{
+                return({lobbyFull: true})
+            }
+          } else {
             return users;
-        }catch (err){
-            throw err;
+          }
+        } catch (err) {
+          throw err;
         }
-    }
+      }
 }

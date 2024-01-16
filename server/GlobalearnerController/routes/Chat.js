@@ -43,10 +43,11 @@ class ChatController{
             try{
                 const userId = req.userId;
                 const chatId = req.body.chatId;
+                
 
                 console.log("Req.body for ChatId: " + JSON.stringify(chatId))
 
-                this.chatManager.insertUserInChat(chatId, userId);
+                await this.chatManager.insertUserInChat(chatId, userId);
                 res.status(200).json({succes:true});
             }catch (err){
                 console.log(err)
@@ -55,15 +56,15 @@ class ChatController{
             
         })
 
-        this.router.get("/getUsersChat", GetUserId, async(req, res) => {
+        this.router.get("/getUsersChat", GetUserId, verifyAccessToken, async(req, res) => {
             try{
                 const userId = req.userId;
 
                 const result = await this.chatManager.getAllChatsFromUser(userId)
 
                 res.status(200).json(result)
-            }catch{
-
+            }catch (err) {
+                res.status(500).json( {succes: false} )
             }
         })
     

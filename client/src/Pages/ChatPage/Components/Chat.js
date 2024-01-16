@@ -90,7 +90,7 @@ export default function Chat() {
                     <div className="card-body">
                       <h5 className="chat-name card-title">{chat.name}</h5>
                       <p className="chat-language card-text">Language: {chat.language}</p>
-                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join</NavLink>
+                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
                     </div>
                   </div>
                 ))}
@@ -108,7 +108,7 @@ export default function Chat() {
                     <div className="card-body">
                       <h5 className="chat-name card-title">{chat.name}</h5>
                       <p className="chat-language card-text">Language: {chat.language}</p>
-                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join</NavLink>
+                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
                     </div>
                   </div>
                 ))}

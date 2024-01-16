@@ -1,5 +1,5 @@
 const express = require('express');
-const {GetUserId} = require ('../middleware/validateJWT')
+const {GetUserId, verifyAccessToken} = require ('../middleware/validateJWT')
 
 
 
@@ -74,13 +74,15 @@ class UserController {
             }
         })
 
-        this.router.get("/getByChatId", async (req,res) => {
+        this.router.get("/getByChatId",verifyAccessToken, GetUserId, async (req,res) => {
             try{
+                const userId = req.userId;
                 const chatId = req.query.chatId;
-                const users = await this.userManager.getUsersByChatId(chatId)
+                const users = await this.userManager.getUsersByChatId(chatId, userId)
                 res.status(201).json({users})
             }catch (err){
                 console.log(err)
+                res.status(500).json( {succes: false})
             }
         })
 

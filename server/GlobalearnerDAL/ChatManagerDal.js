@@ -61,6 +61,29 @@ module.exports = class ChatDal {
         }
     }
 
+    async getUsersByChatId(chatId) {
+      try {
+          const uid = await this.UserChat.findAll({
+              where: {chatId: chatId},
+              attributes: ['userId'],
+              raw: true
+          });
+          console.log("usersByChatId "+ uid)
+          
+          const userIds = uid.map(result => result.userId);
+
+          if (userIds.length === 0) {
+              
+              return [];
+          }
+
+          return userIds;
+      } catch (err) {
+          console.error(err);
+          throw err;
+      }
+  }
+
     async insertUserInChat(chatId, userId) {
         try {
           console.log("chatId: " + chatId);
@@ -73,6 +96,7 @@ module.exports = class ChatDal {
       
           if (!checkUser.length) {
             try {
+              console.log("checkUser.length: " + checkUser.length)
               const insertedUser = await this.UserChat.create({
                 userId: userId,
                 chatId: chatId,
@@ -81,12 +105,14 @@ module.exports = class ChatDal {
               // Additional logic if needed after user insertion
             } catch (err) {
               console.log(err);
+              throw new Error("Failed to insert user into chat.");
             }
           } else {
-            return { message: 'user already exists' };
+            console.log("User already exist");
           }
         } catch (err) {
           console.log(err);
+          throw new Error("ERROR checking for existing user in chat")
         }
       }
 

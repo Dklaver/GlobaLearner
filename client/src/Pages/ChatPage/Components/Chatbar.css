@@ -193,6 +193,8 @@
         transform: translateY(150px);
         top: 20px;
     }
-
+    .message-container {
+        height: 68vh;
+    }
 
 }

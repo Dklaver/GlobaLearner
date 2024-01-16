@@ -51,13 +51,15 @@ db.Message = require("./Message.js")(sequelize,Sequelize);
 db.Chat.belongsToMany(db.User, {
   onDelete: 'CASCADE',
   through: db.UserChat,
-  foreignKey: "chatId"
+  foreignKey: "chatId",
+  unique: false,
 });
 
 db.User.belongsToMany(db.Chat, {
   onDelete: 'CASCADE',
   through: db.UserChat,
-  foreignKey: "userId"
+  foreignKey: "userId",
+  unique: false,
 });
 
 db.Message.belongsTo(db.User, {
