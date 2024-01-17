@@ -135,7 +135,7 @@
     position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+ 
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -175,14 +175,43 @@
 .send-button:hover{
     background-color: #c1f8c3;
 }
+.send-quiz {
+    height: 48px;
+    padding: 10px;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    color: #4caf50;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 5px;
+}
+.send-quiz:hover {
+    background-color: #c1f8c3;
+}
 
+.send-quiz:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.additional-section{
+    border: none;
+    margin-top: 5px;
+}
 .clients-total {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
+    margin: 10px 0;
     color: #777777;
+}
+
+.quizInput{
+    width: 75%;
+    margin: 15px;
 }
 
 

@@ -9,11 +9,23 @@ export default function Chat() {
   const [allowed, SetAllowed] = useState(false);
   const [chats, setChat] = useState([]);
   const [UserChats, setUserChats] = useState([]);
+  const [chatsLanguage, setChatsLanguage] = useState([]);
   const [switchActive, SetSwitchActive] = useState(false);
+  const [languages, SetLanguages] = useState([]);
+  const [languageSelected, setLanguageSelected] = useState(false);
 
   useEffect(() => {
     validateUser();
   }, []);
+
+  useEffect(() => {
+    console.log('language Selected?: ' + languageSelected);
+    
+  }, [languageSelected]);
+
+  useEffect(() =>{
+    console.log("Languages: " + chatsLanguage)
+  },[chatsLanguage])
 
   useEffect(() => {
     console.log('Switch Active?: ' + switchActive);
@@ -21,7 +33,10 @@ export default function Chat() {
 
   useEffect(() => {
     console.log("IS ALLOWED?: " + allowed);
-  }, [allowed])
+    
+  }, [allowed]) 
+
+ 
 
   const validateUser = async () => {
     const jwt = localStorage.getItem('jwt');
@@ -39,6 +54,9 @@ export default function Chat() {
 
       SetAllowed(succes);
       setChat(allChats || []);
+      const uniqueLanguages = [...new Set(responseData.allChats.map(chat => chat.language))].filter(language => language !== "");
+      console.log("all languages used: " + JSON.stringify(uniqueLanguages))
+      SetLanguages(uniqueLanguages || [])
 
       const allUserChats = await axios.get('chat/getUsersChat');
 
@@ -56,6 +74,40 @@ export default function Chat() {
     SetSwitchActive(!switchActive);
   };
 
+  const handleLanguageChange = (event) => {
+   
+    const selectedValue = event.target.value; 
+
+    if (selectedValue === "") {
+      setLanguageSelected(false);
+    } else{
+      setLanguageSelected(true);
+
+      getAllLanguages(selectedValue)
+    }
+    
+  }
+
+  const getAllLanguages = async(language) => {
+    console.log(language)
+    try{
+      const response = await axios.get('chat/getChatsFromLanguage', {
+        params: {
+          language: language,
+        },
+        withCredentials: true,
+      });
+      
+      const responseData = response.data
+      console.log("All languages used: ", responseData)
+      
+      setChatsLanguage(responseData);
+    }catch (err){
+      console.log(err)
+      setChatsLanguage([]);
+    }
+  }
+
 
   return (
     <>
@@ -69,40 +121,68 @@ export default function Chat() {
           <div className='checkbox'>
             <p>show your chats</p>
             <label data-testid="cypress-showUsersChats" className="switch">
-              <input  type="checkbox" checked={switchActive} onChange={handleCheckboxChange} />
-              <span class="slider round"></span>
+              <input type="checkbox" checked={switchActive} onChange={handleCheckboxChange} />
+              <span className="slider round"></span>
             </label>
           </div>
-          
+          <div className="select-container">
+            <select defaultValue="" onChange={handleLanguageChange} className="custom-select">
+              <option value="" disabled>Filter by language</option>
+              <option value="">Select None</option>
+              {languages.map((language, index) => (
+                <option key={index} value={language}>{language}</option>
+              ))}
+            </select>
+          </div>
+  
           {!switchActive ? (
             <section className='container mt-5'>
-              
               <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
-              Create chat
-            </NavLink>
-              
+                Create chat
+              </NavLink>
               <h2 className='chats-header mb-4'>Chats</h2>
-              
-              {chats
-                .sort((a, b) => b.id - a.id)
-                .map((chat) => (
-                  <div className="chat-section card mb-3" key={chat.id}>
-                    <div className="card-body">
-                      <h5 className="chat-name card-title">{chat.name}</h5>
-                      <p className="chat-language card-text">Language: {chat.language}</p>
-                      <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
+              {languageSelected ? (
+                Array.isArray(chatsLanguage) ? (
+                  chatsLanguage.length > 0 ? (
+                    chatsLanguage
+                      .sort((a, b) => b.id - a.id)
+                      .map((chat) => (
+                        <div className="chat-section card mb-3" key={chat.id}>
+                          <div className="card-body">
+                            <h5 className="chat-name card-title">{chat.name}</h5>
+                            <p className="chat-language card-text">Language: {chat.language}</p>
+                            <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
+                          </div>
+                        </div>
+                      ))
+                  ) : (
+                    <p>No chats available for the selected language.</p>
+                  )
+                ) : (
+                  <p>Error: chatsLanguage is not an array</p>
+                )
+              ) : (
+                chats
+                  .sort((a, b) => b.id - a.id)
+                  .map((chat) => (
+                    <div className="chat-section card mb-3" key={chat.id}>
+                      <div className="card-body">
+                        <h5 className="chat-name card-title">{chat.name}</h5>
+                        <p className="chat-language card-text">Language: {chat.language}</p>
+                        <NavLink to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+              )}
             </section>
           ) : (
             <section className='container mt-5'>
-               <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
-              Create chat
-            </NavLink>
+              <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
+                Create chat
+              </NavLink>
               <h2 className='chats-header mb-4'>Your Chats</h2>
               {UserChats
-                .sort((a, b) => b.id - a.id)
+                .sort((a, b) => b.id - a.id)  
                 .map((chat) => (
                   <div className="chat-section card mb-3" key={chat.id}>
                     <div className="card-body">
@@ -118,5 +198,4 @@ export default function Chat() {
       )}
     </>
   );
-};
-
+}

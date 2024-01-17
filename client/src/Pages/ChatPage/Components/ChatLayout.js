@@ -10,7 +10,8 @@ export default function ChatLayout() {
 
   const  { chatId }  = useParams();
   const navigate = useNavigate();
-  const messageContainerRef = useRef();
+  const messageContainerRef = useRef(); 
+  const messageInputRef = useRef(null);
 
   const [messagesLeft, setMessagesLeft] = useState([]);
   const [messagesRight, setMessagesRight] = useState([]);
@@ -20,6 +21,8 @@ export default function ChatLayout() {
   const [totalJoined, SetTotalJoined] = useState(0);
   const [socket, SetSocketio] = useState();
   const [lobbyFull, SetLobbyFull] = useState(false);
+  const [quizTitle, SetQuizTitle] = useState('');
+  const [quizAwnser, SetQuizAwnser] = useState('');
   
  useEffect(()=>{
 if(lobbyFull){
@@ -103,6 +106,13 @@ if(lobbyFull){
         handleReceivedMessage(data, newSocket);
     });
 
+    newSocket.on("recieve_quiz", (quizData) => {
+      // Handle the received quiz data here
+      const senderId = quizData.senderId;
+      const quizTitle = quizData.quizTitle;
+      const quizAwnser = quizData.quizAwnser;
+      alert(JSON.stringify(quizTitle));
+    })
     newSocket.emit("join_chat", { chatId: chatId });
 
     SetSocketio(newSocket);
@@ -129,6 +139,7 @@ const handleReceivedMessage = (data, socket) => {
       return isCurrentUser ? prevState : [...prevState, messageWithTimeStamp];
   });
 };
+
 
 
   const handleInputValue = (e) => {
@@ -224,6 +235,10 @@ const handleReceivedMessage = (data, socket) => {
 
     handleMessage(messageData);
     SetLastMessage("");
+
+    if (messageInputRef.current) {
+      messageInputRef.current.focus();
+    }
     
   }
 
@@ -241,6 +256,24 @@ const handleReceivedMessage = (data, socket) => {
       console.log(err)
     }
     
+  }
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    
+    if (quizAwnser.trim() === "") {
+      // Don't send empty messages
+      return;
+    }
+    const quizData = {
+      quizTitle: quizTitle,
+      quizAwnser: quizAwnser,
+      chatId: chatId
+    }
+    
+    socket.emit("send_quiz", quizData);
+    SetQuizAwnser('');
+    SetQuizTitle('');
   }
 
 
@@ -264,6 +297,39 @@ const handleReceivedMessage = (data, socket) => {
               joined: {userOne}, {userTwo}
             </h1>
             <h3 className="clients-total" id="clients-total">total joined: {totalJoined}</h3>
+
+            <section className="additional-section">
+              <h1>Send quiz:</h1>
+              <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="quiz">Question: </label>
+                <input
+                  className="quizInput"
+                  data-testid="cypress-quiz"
+                  type="text"
+                  id="quiz"
+                  autoComplete="off"
+                  onChange={(e) => SetQuizTitle(e.target.value)}
+                  value={quizTitle}
+                  required
+                />
+
+                <label htmlFor="quizAwnser">Answer: </label>
+                <input
+                  className="quizInput"
+                  autoComplete="off"
+                  data-testid="cypress-quizAwnser"
+                  type="text"
+                  id="quizAwnser"
+                  onChange={(e) => SetQuizAwnser(e.target.value)}
+                  value={quizAwnser}
+                  required
+                />
+              </div>
+                <button className="send-quiz" disabled={!quizTitle || !quizAwnser}>Send quiz</button>
+              </form>
+              
+            </section>
           </div>
 
           {/* Right Half */}
@@ -283,7 +349,7 @@ const handleReceivedMessage = (data, socket) => {
 
             <form className="message-form" id="message-form">
               <div className="col-md-12 col-lg-6 p-3 textbox-right">
-                <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} onChange={handleInputValue} autoComplete="off" />
+                <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} ref={messageInputRef} onChange={handleInputValue} autoComplete="off" />
                 <div className="v-divider"></div>
                 <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
               </div>

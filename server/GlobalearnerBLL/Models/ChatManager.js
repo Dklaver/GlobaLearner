@@ -39,5 +39,10 @@ module.exports = class ChatManager {
    async getAllChatsFromUser(userId){
      return this.ChatManagerDal.getAllChatsFromUser(userId)
    }
+
+   async getChatsFromLanguage(language){
+    const allChats = await this.ChatManagerDal.getChatsFromLanguage(language)
+    return allChats
+   }
     
 }

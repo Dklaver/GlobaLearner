@@ -87,8 +87,20 @@ db.sequelize.sync( ).then((req) => {
 
             io.to(chatId).emit("recieve_message", {message, senderId, timestamp})
             console.log("chatId Websocket: " + chatId + " chatMessage Websocket: " + message)
-
-
+        })
+        socket.on("send_quiz", (data) => {
+            const senderId = socket.id;
+            const chatId = data.chatId;
+            const quizTitle = data.quizTitle;
+            const quizAwnser = data.quizAwnser;
+            console.log("SOCKET DATA FOR QUIZ: ", data)
+            try{
+                io.to(chatId).emit("recieve_quiz", {senderId, quizTitle, quizAwnser})
+                console.log("sending success")
+            }catch (err){
+                console.log(err)
+            }
+            
         })
 
         socket.on("leave_chat", (data) => {

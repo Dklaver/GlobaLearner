@@ -67,6 +67,18 @@ class ChatController{
                 res.status(500).json( {succes: false} )
             }
         })
+
+        this.router.get("/getChatsFromLanguage", GetUserId, verifyAccessToken, async(req, res) => {
+            try{
+                const language = req.query.language;
+                console.log("LANGUAGE RECIEVED: " + JSON.stringify(language))
+                const result = await this.chatManager.getChatsFromLanguage(language)
+                console.log("result: " + JSON.stringify(result))
+                res.status(200).json(result)
+            }catch (err) {
+                res.status(500).json( {succes: false} )
+            }
+        })
     
     }
     

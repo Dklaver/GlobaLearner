@@ -144,4 +144,23 @@ module.exports = class ChatDal {
           console.log(err)
         }
       }
+
+      async getChatsFromLanguage(language) {
+        try{
+          const chats = await this.Chat.findAll({
+            where: {
+              language: language
+            },
+            attributes: ['id','name','language']
+
+          })
+          const languageChats = chats.map((c) => c.toJSON());
+
+          return languageChats
+        }catch (err){
+          console.log(err)
+        }
+      }
+
+      
 }
