@@ -352,7 +352,7 @@ const handleReceivedMessage = (data, socket) => {
           <h2>Title: {recievedQuizTitle}</h2>
           <p>Answer:</p>
           <input type="text" value={userAnswer} onChange={handleInputChange} />
-          <Button variant="primary" onClick={handleQuiz}>
+          <Button style={{backgroundColor: 'green'}} variant="primary" onClick={handleQuiz}>
             Submit
           </Button>
           {isCorrect === true && <p style={{ color: 'green' }}>Correct!</p>}
@@ -360,7 +360,7 @@ const handleReceivedMessage = (data, socket) => {
           {showAwnser === true && <p>{recievedQuizTitle}: {recievedQuizAwnser}</p>}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
+          <Button style={{backgroundColor: 'green'}}variant="secondary" onClick={closeModal}>
             Close
           </Button>
         </Modal.Footer>

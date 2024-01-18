@@ -1,4 +1,5 @@
 import './App.css';
+import Homepage from './Pages/HomePage/homepage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Pages/Shared/Navbar';
 import Chat from './Pages/ChatPage/Components/Chat';
@@ -13,7 +14,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" />
+        <Route path="/" element={<Homepage/>}/>
         <Route path="/register" element={<Register />} />
         <Route path="/chats" element={<Chat />} />
         <Route path="/chat/:chatId" element={<ChatLayout />} />

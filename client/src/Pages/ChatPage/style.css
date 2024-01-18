@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  background-color: #fffff5;
 }
 
 .centered-container {
@@ -49,7 +50,7 @@
 
 .button-Create {
   position: absolute;
-  left: 60%;
+  left: 80%;
   transform: translateX(-10%);
   padding: 10px 20px;
   background-color: #4caf50;
@@ -159,6 +160,7 @@ input:checked + .slider:before {
   background-color: white;  /* Set the background color for options */
   color: #4caf50;  /* Set the text color for options */
 }
+
 
 
 /* Responsive styles */

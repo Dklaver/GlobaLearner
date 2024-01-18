@@ -145,52 +145,82 @@ export default function Chat() {
                 Array.isArray(chatsLanguage) ? (
                   chatsLanguage.length > 0 ? (
                     chatsLanguage
-                      .sort((a, b) => b.id - a.id)
-                      .map((chat) => (
-                        <div className="chat-section card mb-3" key={chat.id}>
-                          <div className="card-body">
-                            <h5 className="chat-name card-title">{chat.name}</h5>
-                            <p className="chat-language card-text">Language: {chat.language}</p>
-                            <NavLink style={{ backgroundColor: 'green'}} to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
+                        .sort((a, b) => b.id - a.id)
+                        .map((chat) => (
+                          <div className="chat-section card mb-3" key={chat.id}>
+                            <div className="card-body">
+                              <h5 className="chat-name card-title">{chat.name}</h5>
+                              <p className="chat-language card-text">Language: {chat.language}</p>
+                              <NavLink
+                                style={{
+                                  backgroundColor: 'white',
+                                  color: 'green',
+                                  borderColor: 'green',
+                                }}
+                                to={`/chat/${chat.id}`}
+                                className="btn btn-primary btn-join"
+                              >
+                                Join {chat.id}
+                              </NavLink>
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        ))
+                    ) : (
+                      <p>No chats available for the selected language.</p>
+                    )
                   ) : (
-                    <p>No chats available for the selected language.</p>
-                  )
-                ) : (
                   <p>Error: chatsLanguage is not an array</p>
                 )
               ) : (
-                chats
-                  .sort((a, b) => b.id - a.id)
-                  .map((chat) => (
-                    <div className="chat-section card mb-3" key={chat.id}>
-                      <div className="card-body">
-                        <h5 className="chat-name card-title">{chat.name}</h5>
-                        <p className="chat-language card-text">Language: {chat.language}</p>
-                        <NavLink style={{ backgroundColor: 'green'}} to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
+                  chats
+                    .sort((a, b) => b.id - a.id)
+                    .map((chat) => (
+                      <div className="chat-section card mb-3" key={chat.id}>
+                        <div className="card-body">
+                          <h5 className="chat-name card-title">{chat.name}</h5>
+                          <p className="chat-language card-text">Language: {chat.language}</p>
+                          <NavLink
+                            style={{
+                              backgroundColor: 'white',
+                              color: 'green',
+                              borderColor: 'green',
+                            }}
+                            to={`/chat/${chat.id}`}
+                            className="btn btn-primary btn-join"
+                          >
+                            Join {chat.id}
+                          </NavLink>
+                        </div>
                       </div>
-                    </div>
-                  ))
-              )}
-            </section>
-          ) : (
-            <section className='container mt-5'>
+                    ))
+                )}
+              </section>
+            ) : (
+              <section className='container mt-5'>
               <NavLink data-testid="cypress-createChatButton" className="btn btn-success button-Create mr-3" to="/chats/create">
                 Create chat
               </NavLink>
               <h2 className='chats-header mb-4'>Your Chats</h2>
               {UserChats
                 .sort((a, b) => b.id - a.id)  
-                .map((chat) => (
-                  <div className="chat-section card mb-3" key={chat.id}>
-                    <div className="card-body">
-                      <h5 className="chat-name card-title">{chat.name}</h5>
-                      <p className="chat-language card-text">Language: {chat.language}</p>
-                      <NavLink style={{ backgroundColor: 'green'}} to={`/chat/${chat.id}`} className="btn btn-primary btn-join">Join {chat.id}</NavLink>
-                    </div>
-                  </div>
+                    .map((chat) => (
+                      <div className="chat-section card mb-3" key={chat.id}>
+                        <div className="card-body">
+                          <h5 className="chat-name card-title">{chat.name}</h5>
+                          <p className="chat-language card-text">Language: {chat.language}</p>
+                          <NavLink
+                            style={{
+                              backgroundColor: 'white',
+                              color: 'green',
+                              borderColor: 'green',
+                            }}
+                            to={`/chat/${chat.id}`}
+                            className="btn btn-primary btn-join"
+                          >
+                            Join {chat.id}
+                          </NavLink>
+                        </div>
+                      </div>
                 ))}
             </section>
           )}
