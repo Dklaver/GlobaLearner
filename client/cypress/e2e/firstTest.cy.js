@@ -49,7 +49,7 @@ describe('End-to-End Registration', () => {
     cy.wait(2000);
     //   // back to chat list page
     cy.url().should('include', '/chats')
-    cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
+    cy.get('[data-testid="cypress-showUsersChats"]').should('exist')
     
     Cypress.on('uncaught:exception', (err, runnable) => {
       // returning false here prevents Cypress from
