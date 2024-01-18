@@ -46,9 +46,9 @@ describe('End-to-End Registration', () => {
     
     
     cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
-    // cy.wait(2000);
+    cy.wait(2000);
     //   // back to chat list page
-    // cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
+    cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
 
     Cypress.on('uncaught:exception', (err, runnable) => {
       // returning false here prevents Cypress from
