@@ -31,9 +31,9 @@ describe('End-to-End Registration', () => {
 
     cy.url().should('include', '/chats')
     
-    // cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
-    // cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
-    // cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').select('Dutch')
+    cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
+    cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
+    cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').select('Dutch')
 
     // cy.get('[data-testid="cypress-createChat"]').should('exist')
 
