@@ -42,12 +42,12 @@ describe('End-to-End Registration', () => {
     cy.wait(2000)
 
     cy.visit('http://localhost:3000/chat/4');
-    cy.get('[data-testid="cypress-messageInput"]').should('exist')
+    cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test");
+    cy.get('[data-testid="cypress-messageSend"]').should('exist').click();
     
-    // .type("this is a cypress test {enter}");
-    //   cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
-  
-    //   // back to chat list page
-    //   cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
+    cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
+    cy.wait(2000);
+      // back to chat list page
+    cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
   });
 });
