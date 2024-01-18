@@ -35,13 +35,13 @@ describe('End-to-End Registration', () => {
     cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
     cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').select('Dutch')
 
-    // cy.get('[data-testid="cypress-createChat"]').should('exist')
+    cy.get('[data-testid="cypress-createChat"]').should('exist')
 
       
 
-    //   // cy.wait(5000)
+    cy.wait(2000)
 
-    //   cy.visit('http://localhost:3000/chat/4');
+    cy.visit('http://localhost:3000/chat/4');
     //   cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test {enter}");
     //   cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
   
