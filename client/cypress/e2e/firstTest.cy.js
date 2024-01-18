@@ -41,7 +41,7 @@ describe('End-to-End Registration', () => {
 
     cy.wait(2000)
 
-    cy.visit('http://localhost:3000/chat/10');
+    // cy.visit('http://localhost:3000/chat/10');
     cy.get('[data-testid="cypress-messageInput"]').should('exist');
     
     
