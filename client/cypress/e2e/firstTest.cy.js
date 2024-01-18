@@ -27,9 +27,9 @@ describe('End-to-End Registration', () => {
     cy.get('[data-testid="cypress-LoginUsername"]').should('exist').type('cypress');
     cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
     cy.get('[data-testid="cypress-loginSignin"]').should('exist').click();
-    // cy.wait(2000);
+    cy.wait(2000);
 
-    // cy.url().should('include', '/chats')
+    cy.url().should('include', '/chats')
     
     // cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
     // cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
