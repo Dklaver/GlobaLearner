@@ -5,6 +5,9 @@ import axios from '../../../axios';
 import './Chatbar.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+
 
 export default function ChatLayout() {
 
@@ -12,7 +15,6 @@ export default function ChatLayout() {
   const navigate = useNavigate();
   const messageContainerRef = useRef(); 
   const messageInputRef = useRef(null);
-
   const [messagesLeft, setMessagesLeft] = useState([]);
   const [messagesRight, setMessagesRight] = useState([]);
   const [lastMessage, SetLastMessage] = useState("");
@@ -23,8 +25,15 @@ export default function ChatLayout() {
   const [lobbyFull, SetLobbyFull] = useState(false);
   const [quizTitle, SetQuizTitle] = useState('');
   const [quizAwnser, SetQuizAwnser] = useState('');
-  
- useEffect(()=>{
+  const [recievedQuizTitle, SetRecievedQuizTitle] = useState('');
+  const [recievedQuizAwnser, SetRecievedQuizAwnser] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [showAwnser, setShowAwnser] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+ useEffect(()=>{ 
 if(lobbyFull){
   navigate("./error")
 }
@@ -108,10 +117,12 @@ if(lobbyFull){
 
     newSocket.on("recieve_quiz", (quizData) => {
       // Handle the received quiz data here
-      const senderId = quizData.senderId;
-      const quizTitle = quizData.quizTitle;
-      const quizAwnser = quizData.quizAwnser;
-      alert(JSON.stringify(quizTitle));
+      // const senderId = quizData.senderId;
+      // const quizTitle = quizData.quizTitle;
+      // const quizAwnser = quizData.quizAwnser;
+
+
+      handleRecievedQuiz(quizData, newSocket)
     })
     newSocket.emit("join_chat", { chatId: chatId });
 
@@ -122,6 +133,17 @@ if(lobbyFull){
     };
 }, [chatId, messagesRight]);
 
+const handleRecievedQuiz = (data, socket) => {
+  const senderId = data.senderId;
+  const quizTitle = data.quizTitle;
+  const quizAwnser = data.quizAwnser;
+  if (senderId === socket.id){
+    return;
+  }
+  console.log("SENDERID: ", senderId,"SOCKET.ID: ", socket.id)
+  SetRecievedQuizTitle(quizTitle);
+  SetRecievedQuizAwnser(quizAwnser);
+}
 
 const handleReceivedMessage = (data, socket) => {
   const { message, senderId, timestamp } = data;
@@ -276,6 +298,41 @@ const handleReceivedMessage = (data, socket) => {
     SetQuizTitle('');
   }
 
+  useEffect(() => {
+    console.log(recievedQuizTitle)
+  }, [recievedQuizTitle, recievedQuizAwnser])
+
+  const handleQuizNotification = async(e) =>{
+    e.preventDefault();
+    setShowModal(true);
+  }
+  const closeModal = async() => {
+    setShowModal(false);
+    setShowAwnser(false);
+    setIsCorrect(null);
+    SetRecievedQuizAwnser('');
+    SetRecievedQuizTitle('');
+  }
+
+  const handleQuiz = () => {
+    if (userAnswer === recievedQuizAwnser) {
+      setIsCorrect(true);
+      
+    } else {
+      setIsCorrect(false);
+    }
+  };
+  const handleInputChange = (e) => {
+    setUserAnswer(e.target.value);
+  };
+  const handleShowAwnser = (e) => {
+    e.preventDefault();
+    setShowAwnser(true);
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <div className="container-fluid">
@@ -283,11 +340,39 @@ const handleReceivedMessage = (data, socket) => {
       <div>
         <NavLink data-testid="cypress-messageToChat" onClick={leaveChat} className='button-back' to="/chats">&lt;</NavLink>
       </div>
+      <div className="notification-container">
+        {(recievedQuizTitle !== '' && recievedQuizAwnser !== '') && (
+          <button className="notification-button" onClick={handleQuizNotification}>
+            Quiz
+          </button>
+        )}
+      </div>
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Received Quiz</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>Title: {recievedQuizTitle}</h2>
+          <p>Answer:</p>
+          <input type="text" value={userAnswer} onChange={handleInputChange} />
+          <Button variant="primary" onClick={handleQuiz}>
+            Submit
+          </Button>
+          {isCorrect === true && <p style={{ color: 'green' }}>Correct!</p>}
+          {isCorrect === false && <p style={{ color: 'red' }}>Wrong!    <button className="show-awnser"onClick={handleShowAwnser}>see awnser</button></p>}
+          {showAwnser === true && <p>{recievedQuizTitle}: {recievedQuizAwnser}</p>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <body>
 
         <div className="row">
           {/* Left Half */}
-          <div className="col-md-12 col-lg-6 p-3 left-div">
+          <div className="col-md-12 col-lg-3 p-3 pt-0 left-div">
             <head>
               <title>Chat</title>
             </head>
@@ -299,41 +384,51 @@ const handleReceivedMessage = (data, socket) => {
             <h3 className="clients-total" id="clients-total">total joined: {totalJoined}</h3>
 
             <section className="additional-section">
-              <h1>Send quiz:</h1>
+              <h1 className="quiz-h1">Send quiz:</h1>
               <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="quiz">Question: </label>
-                <input
-                  className="quizInput"
-                  data-testid="cypress-quiz"
-                  type="text"
-                  id="quiz"
-                  autoComplete="off"
-                  onChange={(e) => SetQuizTitle(e.target.value)}
-                  value={quizTitle}
-                  required
-                />
+                <div className="form-group row">
+                  <label htmlFor="quiz" className="col-form-label col-md-12">Question:</label>
+                  <div className="col-md-12">
+                    <input
+                      className="quizInput form-control"
+                      data-testid="cypress-quiz"
+                      type="text"
+                      id="quiz"
+                      autoComplete="off"
+                      onChange={(e) => SetQuizTitle(e.target.value)}
+                      value={quizTitle}
+                      required
+                    />
+                  </div>
+                </div>
 
-                <label htmlFor="quizAwnser">Answer: </label>
-                <input
-                  className="quizInput"
-                  autoComplete="off"
-                  data-testid="cypress-quizAwnser"
-                  type="text"
-                  id="quizAwnser"
-                  onChange={(e) => SetQuizAwnser(e.target.value)}
-                  value={quizAwnser}
-                  required
-                />
-              </div>
-                <button className="send-quiz" disabled={!quizTitle || !quizAwnser}>Send quiz</button>
+                <div className="form-group row">
+                  <label htmlFor="quizAwnser" className="col-form-label col-md-12">Answer:</label>
+                  <div className="col-md-12">
+                    <input
+                      className="quizInput form-control"
+                      autoComplete="off"
+                      data-testid="cypress-quizAwnser"
+                      type="text"
+                      id="quizAwnser"
+                      onChange={(e) => SetQuizAwnser(e.target.value)}
+                      value={quizAwnser}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                  <div className="col-md-12">
+                    <button className="send-quiz" disabled={!quizTitle || !quizAwnser}>Send quiz</button>
+                  </div>
+                </div>
               </form>
-              
             </section>
           </div>
 
           {/* Right Half */}
-          <div className="col-md-12 col-lg-6 p-3 right-div">
+          <div className="col-md-12 col-lg-9 right-div">
             <div className="name">
               <span><i className="far fa-user"></i></span>
             </div>
