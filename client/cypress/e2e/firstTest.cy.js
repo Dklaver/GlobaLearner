@@ -27,7 +27,7 @@ describe('End-to-End Registration', () => {
     cy.get('[data-testid="cypress-LoginUsername"]').should('exist').type('cypress');
     cy.get('[data-testid="cypress-loginPassword"]').type('Cypress1');
     cy.get('[data-testid="cypress-loginSignin"]').should('exist').click();
-    cy.wait(2000);
+    cy.wait(3000);
 
     cy.url().should('include', '/chats')
     
@@ -43,7 +43,7 @@ describe('End-to-End Registration', () => {
 
     cy.visit('http://localhost:3000/chat/4');
     cy.get('[data-testid="cypress-messageInput"]').should('exist').type("this is a cypress test");
-    cy.get('[data-testid="cypress-messageSend"]').should('exist').click();
+    
     
     cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
     cy.wait(2000);

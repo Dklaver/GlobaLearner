@@ -330,9 +330,6 @@ const handleReceivedMessage = (data, socket) => {
     setShowAwnser(true);
   }
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   return (
     <div className="container-fluid">
@@ -446,7 +443,7 @@ const handleReceivedMessage = (data, socket) => {
               <div className="col-md-12 col-lg-6 p-3 textbox-right">
                 <input data-testid="cypress-messageInput" type="text" id="message-input" className="message-input" placeholder="type here..." value={lastMessage} ref={messageInputRef} onChange={handleInputValue} autoComplete="off" />
                 <div className="v-divider"></div>
-                <button type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
+                <button data-testid="cypress-messageSend" type="submit" className="send-button" onClick={sendMessage}>send <span>→</span></button>
               </div>
             </form>
           </div>
