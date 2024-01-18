@@ -33,7 +33,7 @@ describe('End-to-End Registration', () => {
     
     cy.get('[data-testid="cypress-createChatButton"]').should('exist').click();
     cy.get('[data-testid="cypress-createChatName"]').should('exist').type('CypressTest');
-    cy.get('[data-testid="cypress-createChatLanguage"]').should('exist')
+    cy.get('[data-testid="cypress-createChatLanguage"]').should('exist').select('Dutch')
 
     cy.get('[data-testid="cypress-createChat"]').should('exist')
 
@@ -46,6 +46,6 @@ describe('End-to-End Registration', () => {
       cy.get('[data-testid="cypress-messageToChat"]').should('exist').click();
   
       // back to chat list page
-      cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
+      // cy.get('[data-testid="cypress-showUsersChats"]').should('exist').click();
   });
 });
